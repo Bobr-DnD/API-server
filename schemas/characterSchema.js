@@ -14,8 +14,11 @@ const characterSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
-        enum: ['woman', 'man', 'mutant', 'robot'],
-        default: 'man'
+        default: null
+    },
+    class: {
+        type: String,
+        default: null
     },
     level: {
         type: Number,
@@ -25,7 +28,7 @@ const characterSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    experienceToLevelUp:{
+    experienceToLevelUp: {
         type: Number,
         default: 10
     },
@@ -52,6 +55,10 @@ const characterSchema = new mongoose.Schema({
     customFields: {
         type: Object,
         default: {}
+    },
+    quest: {
+        type: String,
+        default: null
     },
     weapons: {
         type: [mongoose.Schema.ObjectId],
