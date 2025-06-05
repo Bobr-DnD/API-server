@@ -12,4 +12,4 @@ const fractionSchema = new mongoose.Schema({
 })
 
 
-const Session = mongoose.model('Fraction', fractionSchema)
+export default mongoose.model('Fraction', fractionSchema)

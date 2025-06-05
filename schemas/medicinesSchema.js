@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
-const chemicalSchema = new mongoose.Schema({
+const medicineSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Medicine should have a name'],
         trim: true
     },
-    info: {
+    description: {
         type: String,
         required: [true, 'Chemical should have a description'],
         trim: true
@@ -40,4 +40,4 @@ const chemicalSchema = new mongoose.Schema({
         toObject: { virtuals: true }
     });
 
-export default mongoose.model('Medicine', chemicalSchema);
+export default mongoose.model('Medicine', medicineSchema);

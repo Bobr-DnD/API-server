@@ -28,7 +28,7 @@ const sessionSchema = new mongoose.Schema({
         default: []
     },
     fractions: {
-        type: [mongo.Schema.ObjectId],
+        type: [mongoose.Schema.ObjectId],
         ref: 'Fraction',
         default: []
     },

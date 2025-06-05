@@ -6,9 +6,9 @@ const inventorySchema = new mongoose.Schema({
         required: [true, 'Item should have a name'],
         trim: true
     },
-    info: {
+    description: {
         type: String,
-        required: [true, 'Item should have a description'],
+        deafult: null,
         trim: true
     },
     price: {

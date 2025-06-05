@@ -2,7 +2,10 @@ import Fastify from 'fastify'
 import dotenv from 'dotenv'
 import cors from '@fastify/cors'
 import db from './plugins/mongoDB.js'
-import charactersRoutes from './routes/characters.js'
+import charactersRoute from './routes/character.js'
+import enemyRoute from './routes/enemy.js'
+import medicineRoute from './routes/medicine.js'
+import genericRouteHandler from './routes/generic.js'
 import mongoosePlugin from './plugins/mongoose.js'
 
 dotenv.config({ path: './config.env' })
@@ -27,7 +30,17 @@ await fastify.register(db)
 await fastify.register(mongoosePlugin)
 
 // Register routes
-fastify.register(charactersRoutes, { prefix: '/characters' })
+fastify.register(charactersRoute, { prefix: '/character' })
+fastify.register(enemyRoute, {prefix: '/enemy'})
+fastify.register(medicineRoute, {prefix: '/medicine'})
+
+fastify.register(genericRouteHandler, {prefix: '/armor', model: 'Armor', collection: 'armors'})
+fastify.register(genericRouteHandler, {prefix: '/effect', model: 'Effect', collection: 'effects'})
+fastify.register(genericRouteHandler, {prefix: '/fraction', model: 'Fraction', collection: 'fractions'})
+fastify.register(genericRouteHandler, {prefix: '/inventory', model: 'Inventory', collection: 'inventories'})
+fastify.register(genericRouteHandler, {prefix: '/perk', model: 'Perk', collection: 'perks'})
+fastify.register(genericRouteHandler, {prefix: '/quest', model: 'Quest', collection: 'quests'})
+fastify.register(genericRouteHandler, {prefix: '/weapon', model: 'Weapon', collection: 'weapons'})
 
 // Start server
 const start = async () => {

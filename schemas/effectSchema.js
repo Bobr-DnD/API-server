@@ -6,7 +6,7 @@ const effectSchema = new mongoose.Schema({
         required: [true, 'Effect should have a name'],
         trim: true
     },
-    info: {
+    description: {
         type: String,
         required: [true, 'Effect should have a description'],
         trim: true
