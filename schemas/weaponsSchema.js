@@ -8,8 +8,8 @@ const weaponSchema = new mongoose.Schema({
     },
     range: {
         type: Number,
-        required: [true, 'Weapon should have a range'],
         enum: [1, 2, 3],
+        default: 2
     },
     type: {
         type: String,

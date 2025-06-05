@@ -5,6 +5,7 @@ import db from './plugins/mongoDB.js'
 import charactersRoute from './routes/character.js'
 import enemyRoute from './routes/enemy.js'
 import medicineRoute from './routes/medicine.js'
+import sessionRoute from './routes/session.js'
 import genericRouteHandler from './routes/generic.js'
 import mongoosePlugin from './plugins/mongoose.js'
 
@@ -33,6 +34,7 @@ await fastify.register(mongoosePlugin)
 fastify.register(charactersRoute, { prefix: '/character' })
 fastify.register(enemyRoute, {prefix: '/enemy'})
 fastify.register(medicineRoute, {prefix: '/medicine'})
+fastify.register(sessionRoute, {prefix: '/session'})
 
 fastify.register(genericRouteHandler, {prefix: '/armor', model: 'Armor', collection: 'armors'})
 fastify.register(genericRouteHandler, {prefix: '/effect', model: 'Effect', collection: 'effects'})
