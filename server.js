@@ -8,6 +8,7 @@ import medicineRoute from './routes/medicine.js'
 import sessionRoute from './routes/session.js'
 import genericRouteHandler from './routes/generic.js'
 import mongoosePlugin from './plugins/mongoose.js'
+import customLogger from './plugins/logger.js'
 
 dotenv.config({ path: './config.env' })
 
@@ -19,16 +20,16 @@ const fastify = Fastify({
       options: {
         colorize: true,
         translateTime: 'SYS:yyyy-mm-dd HH:MM:ss Z',
-        ignore: 'pid,hostname,reqId,req,res,err,responseTime',
-        messageFormat: '{req.method} {req.url} → {res.statusCode}; {err.type} -> {err.message}'
+        ignore: 'pid,hostname,reqId,req,res,err,responseTime'
       }
     }
   }
 })
 
+await fastify.register(customLogger)
 await fastify.register(cors, { origin: ['http://127.0.0.1:8080', 'http://localhost:8080'], credentials: true })
-await fastify.register(db)
-await fastify.register(mongoosePlugin)
+await fastify.register(db, {use_local: process.env.DB_LOCAL === 'true'})
+await fastify.register(mongoosePlugin, {use_local: process.env.DB_LOCAL === 'true'})
 
 // Register routes
 fastify.register(charactersRoute, { prefix: '/character' })
@@ -48,7 +49,7 @@ fastify.register(genericRouteHandler, {prefix: '/weapon', model: 'Weapon', colle
 const start = async () => {
   try {
     await fastify.listen({ port: process.env.API_PORT})
-    console.log(`Server running on http://localhost:${process.env.API_PORT}`)
+    fastify.log.info(`Server running on http://localhost:${process.env.API_PORT}`)
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
