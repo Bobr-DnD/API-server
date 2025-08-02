@@ -12,11 +12,11 @@ const enemySchema = new mongoose.Schema({
         required: [true, 'Enemy should have a photo'],
         trim: true
     },
-    gender: {
+    gender: { //make it enum later
         type: String,
         default: null
     },
-    class: {
+    class: { //make it enum later
         type: String,
         default: null
     },

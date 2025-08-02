@@ -23,7 +23,8 @@ const fastify = Fastify({
         ignore: 'pid,hostname,reqId,req,res,err,responseTime'
       }
     }
-  }
+  },
+  disableRequestLogging: true
 })
 
 await fastify.register(customLogger)
@@ -49,7 +50,6 @@ fastify.register(genericRouteHandler, {prefix: '/weapon', model: 'Weapon', colle
 const start = async () => {
   try {
     await fastify.listen({ port: process.env.API_PORT})
-    fastify.log.info(`Server running on http://localhost:${process.env.API_PORT}`)
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)

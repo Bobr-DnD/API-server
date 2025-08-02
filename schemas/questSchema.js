@@ -19,6 +19,8 @@ const questSchema = new mongoose.Schema({
         type: [Object],
         default: null
     }
+    /*
+    The structre of steps:[{"name":"blabla", "status":"active"}]  using same enum for status*/
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }

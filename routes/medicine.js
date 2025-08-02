@@ -21,7 +21,7 @@ export default async function medicineRoute(fastify, opts) {
             return reply.code(400).send({ error: 'Invalid ID: must be a 24-character hex string' })
         }
 
-        const medicine = await medicines().findOne({ _id: objectId })
+        const medicine = await Medicine.findOne(objectId).populate('effect').populate('addictionEffect').populate('recipe').exec()
         if (!medicine) {
             return reply.code(404).send({ error: 'Medicine not found' })
         }

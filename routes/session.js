@@ -21,7 +21,7 @@ export default async function sessionRoute(fastify, opts) {
             return reply.code(400).send({ error: 'Invalid ID format' })
         }
 
-        const session = await sessions().findOne({ _id: objectId })
+        const session = await Session.findOne(objectId).populate('characters').populate('fractions').populate('quests').exec()
         if (!session) {
             return reply.code(404).send({ error: 'Session not found' })
         }

@@ -11,6 +11,7 @@ const perkSchema = new mongoose.Schema({
         required: [true, 'Perk should have an effect'],
         trim: true
     },
+    /*effect structure: effect:{"description":"text if you need some", "A":1, "health":30} */
     requirement: {
         type: Object,
         default: null

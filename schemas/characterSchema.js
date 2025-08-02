@@ -12,11 +12,11 @@ const characterSchema = new mongoose.Schema({
         required: [true, 'Character should have a photo'],
         trim: true
     },
-    gender: {
+    gender: { //make it enum later
         type: String,
         default: null
     },
-    class: {
+    class: { //make enum later
         type: String,
         default: null
     },
@@ -75,18 +75,19 @@ const characterSchema = new mongoose.Schema({
         ref: 'Perk',
         default: []
     },
-    chemicals: {
+    medicines: {
         type: [mongoose.Schema.ObjectId],
-        ref: 'Chemical',
+        ref: 'Medicine',
         default: []
     },
     effects: {
-        type: [Object],
+        type: [mongoose.Schema.ObjectId],
+        ref: 'Effect',
         default: []
     },
-    others: {
+    inventory: {
         type: [mongoose.Schema.ObjectId],
-        ref: 'Other',
+        ref: 'Inventory',
         default: []
     }
 },

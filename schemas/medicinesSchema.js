@@ -12,12 +12,12 @@ const medicineSchema = new mongoose.Schema({
         trim: true
     },
     effect: {
-        type: [mongoose.Schema.ObjectId],
+        type: mongoose.Schema.ObjectId,
         ref: "Effect",
         default: null
     },
     addictionEffect: {
-        type: [mongoose.Schema.ObjectId],
+        type: mongoose.Schema.ObjectId,
         ref: "Effect",
         default: null
     },

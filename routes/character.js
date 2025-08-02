@@ -15,6 +15,8 @@ export default async function charactersRoute(fastify, opts) {
     })
 
     fastify.post('/', async (request, reply) => {
+        if (!request.body.maxHealth) request.body.maxHealth = request.body.health
+        
         const character = await Character.create(request.body)
         return reply.code(201).send(character)
     })
@@ -28,12 +30,12 @@ export default async function charactersRoute(fastify, opts) {
             return reply.code(400).send({ error: 'Invalid ID: must be a 24-character hex string' })
         }
 
-        const character = await Character.findById(objectId)/*.populate('weapons')
+        const character = await Character.findById(objectId).populate('weapons')
             .populate('armor')
             .populate('perks')
             .populate('effects')
             .populate('medicines')
-            .populate('inventorys').exec();*/
+            .populate('inventory').exec();
 
         if (!character) {
             return character.code(404).send({ error: 'Not found' })

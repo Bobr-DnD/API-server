@@ -25,7 +25,7 @@ export default async function enemyRoute(fastify, opts) {
             return reply.code(400).send({ error: 'Invalid ID: must be a 24-character hex string' })
         }
 
-        const enemy = await enemies().findOne({ _id: objectId })
+        const enemy = await Enemy.findOne(objectId).populate('weapons').populate('armor').exec()
         if (!enemy) {
             return reply.code(404).send({ error: 'Enemy not found' })
         }

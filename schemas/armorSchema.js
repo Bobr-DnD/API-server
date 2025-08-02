@@ -6,7 +6,7 @@ const armorSchema = new mongoose.Schema({
         required: [true, 'Armor should have a name'],
         trim: true
     },
-    type: {
+    type: { //make Enum later
         type: String,
         default: 'outerwear',
         trim: true

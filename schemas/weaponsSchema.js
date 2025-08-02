@@ -33,7 +33,7 @@ const weaponSchema = new mongoose.Schema({
     },
     effect: {
         type: String,
-        default: ''
+        default: null
     },
     price: {
         type: Number,

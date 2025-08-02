@@ -7,12 +7,10 @@ const sessionSchema = new mongoose.Schema({
         trim: true
     },
     currency: {
-        type: Number,
-        default: 0
-    },
-    currencySecondary: {
-        type: Number,
-        default: null
+        type: Object,
+        default: {
+            "Money": 0
+        }
     },
     move: {
         type: Number,
