@@ -27,4 +27,4 @@ const questSchema = new mongoose.Schema({
 })
 
 
-export default new mongoose.model('Quest', questSchema)
+export default mongoose.model('Quest', questSchema)

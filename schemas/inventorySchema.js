@@ -21,4 +21,4 @@ const inventorySchema = new mongoose.Schema({
         toObject: { virtuals: true }
     })
 
-export default new mongoose.model('Inventory', inventorySchema);
+export default mongoose.model('Inventory', inventorySchema);
