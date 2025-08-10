@@ -1,10 +1,10 @@
 import Session from '../schemas/sessionSchema.js'
-import {commonRoutes} from '../plugins/commonController.js'
+import { commonRoutes } from '../plugins/commonController.js'
 
 export default async function sessionRoute(fastify, opts) {
     const sessions = () => fastify.mongo.db.collection('sessions')
-    
-    commonRoutes(fastify, {path:'/', model:Session, collection:sessions, skipMethods:['getById']})
+
+    commonRoutes(fastify, { path: '/', model: Session, collection: sessions, skipMethods: ['getById'] })
 
     fastify.get('/:id', async (request, reply) => {
         let objectId
@@ -14,7 +14,8 @@ export default async function sessionRoute(fastify, opts) {
             return reply.code(400).send({ error: 'Invalid ID format' })
         }
 
-        const session = await Session.findOne(objectId).populate('characters').populate('fractions').populate('quests').exec()
+        const session = await Session.findOne(objectId).populate(['characters', 'fractions', 'quests']).exec()
+        await session.populate(['characters.weapons', 'characters.armor', 'characters.perks', 'characters.effects', 'characters.medicines', 'characters.inventory', 'characters.quest'])
         if (!session) {
             return reply.code(404).send({ error: 'Session not found' })
         }

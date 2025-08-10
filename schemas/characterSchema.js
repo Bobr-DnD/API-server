@@ -57,7 +57,8 @@ const characterSchema = new mongoose.Schema({
         default: {}
     },
     quest: {
-        type: String,
+        type: [mongoose.Schema.ObjectId],
+        ref: 'Quest',
         default: null
     },
     weapons: {

@@ -15,12 +15,7 @@ export default async function charactersRoute(fastify, opts) {
             return reply.code(400).send({ error: 'Invalid ID: must be a 24-character hex string' })
         }
 
-        const character = await Character.findById(objectId).populate('weapons')
-            .populate('armor')
-            .populate('perks')
-            .populate('effects')
-            .populate('medicines')
-            .populate('inventory').exec();
+        const character = await Character.findById(objectId).populate(['weapons', 'armor', 'perks', 'effects', 'medicines', 'inventory', 'quest']).exec();
 
         if (!character) {
             return character.code(404).send({ error: 'Not found' })

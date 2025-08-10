@@ -6,6 +6,10 @@ const sessionSchema = new mongoose.Schema({
         required: [true, 'Session should have a name'],
         trim: true
     },
+    image:{
+        type: String,
+        trim: true
+    },
     currency: {
         type: Object,
         default: {
