@@ -14,7 +14,7 @@ export default async function sessionRoute(fastify, opts) {
             return reply.code(400).send({ error: 'Invalid ID format' })
         }
 
-        const session = await Session.findOne(objectId).populate(['characters', 'fractions', 'quests']).exec()
+        const session = await Session.findOne(objectId).populate(['characters', 'fractions', 'quests', 'armors', 'enemies', 'perks', 'inventories', 'medicines', 'weapons', 'effects']).exec()
         await session.populate(['characters.weapons', 'characters.armor', 'characters.perks', 'characters.effects', 'characters.medicines', 'characters.inventory', 'characters.quest'])
         if (!session) {
             return reply.code(404).send({ error: 'Session not found' })

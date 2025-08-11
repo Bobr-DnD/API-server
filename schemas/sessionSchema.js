@@ -29,6 +29,41 @@ const sessionSchema = new mongoose.Schema({
         ref: 'Character',
         default: []
     },
+    armors:{
+        type: [mongoose.Schema.ObjectId],
+        ref: 'Armor',
+        default: []
+    },
+    enemies:{
+        type: [mongoose.Schema.ObjectId],
+        ref: 'Enemy',
+        default: []
+    },
+    inventories:{
+        type: [mongoose.Schema.ObjectId],
+        ref: 'Inventory',
+        default: []
+    },
+    medicines:{
+        type: [mongoose.Schema.ObjectId],
+        ref: 'Medicine',
+        default: []
+    },
+    perks:{
+        type: [mongoose.Schema.ObjectId],
+        ref: 'Perk',
+        default: []
+    },
+    weapons:{
+        type: [mongoose.Schema.ObjectId],
+        ref: 'Weapon',
+        default: []
+    },
+    effects:{
+        type: [mongoose.Schema.ObjectId],
+        ref: 'Effect',
+        default: []
+    },
     fractions: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Fraction',
