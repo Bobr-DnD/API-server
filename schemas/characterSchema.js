@@ -7,7 +7,7 @@ const characterSchema = new mongoose.Schema({
         unique: false,
         trim: true
     },
-    photo: {
+    image: {
         type: String,
         required: [true, 'Character should have a photo'],
         trim: true
