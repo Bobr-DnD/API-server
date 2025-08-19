@@ -56,6 +56,15 @@ const characterSchema = new mongoose.Schema({
         type: Object,
         default: {}
     },
+    effects: {
+        type: [Object],
+        default: []
+    },
+    session: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Session',
+        require: [true, 'Character should have a session']
+    },
     quest: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Quest',
@@ -79,11 +88,6 @@ const characterSchema = new mongoose.Schema({
     medicines: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Medicine',
-        default: []
-    },
-    effects: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Effect',
         default: []
     },
     inventory: {
