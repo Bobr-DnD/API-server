@@ -17,6 +17,8 @@ export default async function charactersRoute(fastify, opts) {
 
         const character = await Character.findById(objectId).populate(['weapons', 'armor', 'perks', 'effects', 'medicines', 'inventory', 'quest']).exec();
 
+        await character.populate(['medicines.effect', 'medicines.addictionEffect', 'medicines.recipe'])
+
         if (!character) {
             return reply.code(404).send({ error: 'Not found' })
         }

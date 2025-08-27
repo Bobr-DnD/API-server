@@ -16,6 +16,8 @@ export default async function sessionRoute(fastify, opts) {
 
         const session = await Session.findOne(objectId).populate(['characters', 'fractions', 'quests', 'armors', 'enemies', 'perks', 'inventories', 'medicines', 'weapons', 'effects']).exec()
         await session.populate(['characters.weapons', 'characters.armor', 'characters.perks', 'characters.effects', 'characters.medicines', 'characters.inventory', 'characters.quest'])
+        await session.populate(['medicines.effect', 'medicines.addictionEffect', 'medicines.recipe'])
+
         if (!session) {
             return reply.code(404).send({ error: 'Session not found' })
         }
