@@ -66,7 +66,7 @@ const characterSchema = new mongoose.Schema({
         require: [true, 'Character should have a session']
     },
     quest: {
-        type: [mongoose.Schema.ObjectId],
+        type: mongoose.Schema.ObjectId,
         ref: 'Quest',
         default: null
     },
