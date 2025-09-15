@@ -1,8 +1,8 @@
-export function toObjectId(id, reply) {
+export function toObjectId(id, response) {
     try {
-        return new reply.server.mongo.ObjectId(id)
+        return new response.server.mongo.ObjectId(id)
     } catch {
-        reply.code(400).send({ error: 'Invalid ID format' })
+        response.code(400).send({ error: 'Invalid ID: must be a 24-character hex string' })
         return null
     }
 }

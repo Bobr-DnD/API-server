@@ -3,7 +3,7 @@ import mongoose from "mongoose"
 const fractionSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'Session should have a name'],
+        required: [true, 'Fraction should have a name'],
         trim: true
     }
 }, {

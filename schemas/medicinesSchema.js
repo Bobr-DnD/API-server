@@ -8,7 +8,7 @@ const medicineSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: [true, 'Chemical should have a description'],
+        required: [true, 'Medicine should have a description'],
         trim: true
     },
     effect: {

@@ -5,9 +5,9 @@ import Inventory from '../schemas/inventorySchema.js'
 import Perk from '../schemas/perkSchema.js'
 import Quest from '../schemas/questSchema.js'
 import Weapon from '../schemas/weaponsSchema.js'
-import {commonRoutes} from '../plugins/commonController.js'
+import { getEntities, getEntityById, createEntity, updateEntity, deleteEntity } from '../controllers/commonController.js'
 
-export default async function genericRouteHandler(fastify, opts) {
+export default async function commonRouter(fastify, opts) {
     const collection = () => fastify.mongo.db.collection(opts.collection)
     const models = {
         Armor,
@@ -19,5 +19,10 @@ export default async function genericRouteHandler(fastify, opts) {
         Weapon
     }
     const model = models[opts.model]
-    commonRoutes(fastify, {path:'/', model, collection})
+    
+    fastify.get('/', getEntities(collection));
+    fastify.get('/:id', getEntityById(collection));
+    fastify.post('/', createEntity(model))
+    fastify.patch('/:id', updateEntity(model))
+    fastify.delete('/:id', deleteEntity(collection))
 }
