@@ -11,7 +11,7 @@ import commonRouter from './routes/commonRouter.js'
 import mongoosePlugin from './plugins/mongoose.js'
 import customLogger from './plugins/logger.js'
 
-dotenv.config({ path: './config.env' })
+dotenv.config({ path: './.env' })
 
 const fastify = Fastify({
   logger: {
