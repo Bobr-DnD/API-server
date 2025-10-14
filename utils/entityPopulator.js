@@ -10,9 +10,6 @@ export function populateCharacter(query) {
         'medicines',
         'inventory',
         'quest',
-        'medicines.effect',
-        'medicines.addictionEffect',
-        'medicines.recipe'
     ]);
 }
 

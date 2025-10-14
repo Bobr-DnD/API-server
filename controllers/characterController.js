@@ -1,7 +1,7 @@
 import Character from '../schemas/characterSchema.js'
 import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateEffects } from '../utils/characterHelper.js'
-import { populateCharacter } from '../utils/entityPopulator.js'
+import { populateCharacter, populateMedicine } from '../utils/entityPopulator.js'
 
 export const getCharacters = async (request, response) => {
     const characters = await Character.find();
@@ -19,7 +19,11 @@ export const getCharacterById = async (request, response) => {
         return response.code(404).send({ error: `Character with ID ${objectId} not found` })
     }
 
-    character.effects = await populateEffects(character.effects);
+    //character.effects = await populateEffects(character.effects);
+    //character.medicines = await populateMedicine(character.medicines)
+
+    console.log(character.medicines);
+    
 
     return response.code(200).send(character)
 }
