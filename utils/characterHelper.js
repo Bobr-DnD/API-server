@@ -12,17 +12,3 @@ export async function populateEffects(effects) {
         })
     )
 }
-
-export async function populateMedicines(medicines) {
-    return Promise.all(
-        medicines.map(async (m) => {
-            if (m?.effect) {
-                m.effect = await Effect.findById(m.effect)
-            }
-            console.log(m.effect);
-            
-            
-            return m
-        })
-    )
-}

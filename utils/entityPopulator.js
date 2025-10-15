@@ -10,6 +10,7 @@ export function populateCharacter(query) {
         'medicines',
         'inventory',
         'quest',
+        { path: 'medicines', populate: ['effect', 'addictionEffect', 'recipe'] }
     ]);
 }
 
