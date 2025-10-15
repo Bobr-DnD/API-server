@@ -8,24 +8,18 @@ const weaponSchema = new mongoose.Schema({
     },
     range: {
         type: Number,
-        enum: [1, 2, 3],
         default: 2
-    },
-    type: {
-        type: String,
-        default: null
-    },
-    specific: {
-        type: String,
-        default: null
     },
     actionPoints: {
         type: Number,
-        default: 0
+        default: 1
     },
     damage: {
-        type: String,
-        default: '1d6'
+        type: Array
+    },
+    customFields:{
+        type: Array,
+        default: null
     },
     requirement: {
         type: Object,

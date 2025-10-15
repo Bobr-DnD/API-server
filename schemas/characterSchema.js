@@ -37,28 +37,20 @@ const characterSchema = new mongoose.Schema({
         default: 0
     },
     health: {
-        type: Number,
-        default: 0
-    },
-    maxHealth: {
-        type: Number,
-        default: 0
-    },
-    healing: {
-        type: Number,
+        type: Array,
         default: 0
     },
     characteristics: {
         type: Object,
-        default: {}
+        default: null
     },
     customFields: {
         type: Object,
-        default: {}
+        default: null
     },
     effects: {
         type: [Object],
-        default: []
+        default: null
     },
     session: {
         type: mongoose.Schema.ObjectId,
