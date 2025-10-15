@@ -7,17 +7,37 @@ const weaponSchema = new mongoose.Schema({
         trim: true
     },
     range: {
-        type: Object,
-        default: null
+        type: Array,
+        default: [
+            {
+                min: null,
+                max: 1
+            }
+        ]
     },
     actionPoints: {
-        type: Number,
-        default: 1
+        type: Array,
+        default: [
+            {
+                min: null,
+                max: 1
+            }
+        ]
     },
     damage: {
-        type: Array
+        type: Array,
+        default: [
+            {
+                damage: "1d6",
+                type: "Колючий"
+            },
+            {
+                damage: "1d6+2",
+                type: "Ріжучий/Рубаючий"
+            }
+        ]
     },
-    adminNotes:{
+    adminNotes: {
         type: Array,
         default: null
     },
