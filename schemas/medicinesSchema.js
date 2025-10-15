@@ -33,6 +33,10 @@ const medicineSchema = new mongoose.Schema({
         type: [mongoose.Schema.ObjectId],
         ref: 'Medicine',
         default: null
+    },
+    adminNotes:{
+        type: Array,
+        default: null
     }
 },
     {

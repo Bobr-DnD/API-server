@@ -17,7 +17,7 @@ const weaponSchema = new mongoose.Schema({
     damage: {
         type: Array
     },
-    customFields:{
+    adminNotes:{
         type: Array,
         default: null
     },

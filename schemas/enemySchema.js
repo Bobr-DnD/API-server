@@ -57,6 +57,10 @@ const enemySchema = new mongoose.Schema({
         type: Object,
         default: {}
     },
+    adminNotes:{
+        type: Array,
+        default: null
+    },
     weapons: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Weapon',

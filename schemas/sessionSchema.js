@@ -24,6 +24,10 @@ const sessionSchema = new mongoose.Schema({
         type: Object,
         default: {}
     },
+    adminNotes:{
+        type: Array,
+        default: null
+    },
     characters: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Character',

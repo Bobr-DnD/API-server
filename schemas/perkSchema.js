@@ -23,6 +23,10 @@ const perkSchema = new mongoose.Schema({
     ranks: {
         type: Number,
         default: 0
+    },
+    adminNotes:{
+        type: Array,
+        default: null
     }
 },
     {

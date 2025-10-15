@@ -5,6 +5,10 @@ const fractionSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Fraction should have a name'],
         trim: true
+    },
+    adminNotes:{
+        type: Array,
+        default: null
     }
 }, {
     toJSON: { virtuals: true },

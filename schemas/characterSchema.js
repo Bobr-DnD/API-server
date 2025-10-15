@@ -52,6 +52,14 @@ const characterSchema = new mongoose.Schema({
         type: [Object],
         default: null
     },
+    adminNotes:{
+        type: Array,
+        default: null
+    },
+    playerNotes:{
+        type: Array,
+        default: null
+    },
     session: {
         type: mongoose.Schema.ObjectId,
         ref: 'Session',
