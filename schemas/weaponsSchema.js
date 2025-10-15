@@ -7,8 +7,8 @@ const weaponSchema = new mongoose.Schema({
         trim: true
     },
     range: {
-        type: Number,
-        default: 2
+        type: Object,
+        default: null
     },
     actionPoints: {
         type: Number,
