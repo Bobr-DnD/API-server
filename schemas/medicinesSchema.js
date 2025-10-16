@@ -34,6 +34,10 @@ const medicineSchema = new mongoose.Schema({
         ref: 'Medicine',
         default: null
     },
+    uses:{
+        type: Number, 
+        default: 1
+    },
     adminNotes:{
         type: Array,
         default: null

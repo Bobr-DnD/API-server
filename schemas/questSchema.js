@@ -17,10 +17,13 @@ const questSchema = new mongoose.Schema({
     },
     steps: {
         type: [Object],
-        default: null
+        default: {
+            name: "quest name",
+            status: "hidden",
+            requirement: "2 Strength",
+            reward: "10 монет"
+        }
     },
-    /*
-    The structre of steps:[{"name":"blabla", "status":"active"}]  using same enum for status*/
     adminNotes:{
         type: Array,
         default: null
