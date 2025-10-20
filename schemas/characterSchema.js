@@ -37,13 +37,13 @@ const characterSchema = new mongoose.Schema({
         default: 0
     },
     health: {
-        type: Array,
+        type: [Object],
         default: {
             name: "Здоров'я",
             min: 0,
             max: 25,
             value: 25,
-            healing: 3
+            healing: 0
         }
     },
     characteristics: {
