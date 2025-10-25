@@ -12,11 +12,15 @@ const characterSchema = new mongoose.Schema({
         required: [true, 'Character should have a photo'],
         trim: true
     },
-    gender: { //make it enum later
+    gender: {
         type: String,
         default: null
     },
-    class: { //make enum later
+    class: {
+        type: String,
+        default: null
+    },
+    race: {
         type: String,
         default: null
     },
@@ -43,7 +47,8 @@ const characterSchema = new mongoose.Schema({
             min: 0,
             max: 25,
             value: 25,
-            healing: 0
+            healing: 0,
+            colors: ["#3E5F44", "#FABC3F", "#8E1616"]
         }
     },
     characteristics: {
@@ -58,11 +63,11 @@ const characterSchema = new mongoose.Schema({
         type: [Object],
         default: null
     },
-    adminNotes:{
+    adminNotes: {
         type: Array,
         default: null
     },
-    playerNotes:{
+    playerNotes: {
         type: Array,
         default: null
     },

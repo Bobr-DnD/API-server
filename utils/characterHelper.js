@@ -8,13 +8,13 @@ export async function populateEffects(effects = []) {
     return Promise.all(
         effects.map(async (e) => {
             try {
-                if (!e || !e.effect) return e
+                if (!e || !e.id) return e
 
-                const found = await Effect.findById(e.effect)
-                return { ...e, effect: found || e.effect }
+                const found = await Effect.findById(e.id)
+                return { ...e, effect: found }
 
             } catch (err) {
-                console.warn(`Failed to populate effect ${e.effect}:`, err.message)
+                console.warn(`Failed to populate effect ${e.id}:`, err.message)
                 return e
             }
         })

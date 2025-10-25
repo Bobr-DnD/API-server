@@ -22,7 +22,7 @@ const weaponSchema = new mongoose.Schema({
         }
     },
     damage: {
-        type: Array,
+        type: [Object],
         default: [
             {
                 damage: "1d6",

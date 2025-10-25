@@ -1,6 +1,7 @@
 import Session from '../schemas/sessionSchema.js'
 import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateSession } from '../utils/entityPopulator.js';
+import { transformId } from '../utils/IDConverter.js'
 
 
 export const getSessions = async (request, response) => {
@@ -19,6 +20,10 @@ export const getSessionById = async (request, response) => {
     if (!session) {
         return response.code(404).send({ error: `Session with ID ${objectId} not found` })
     }
+
+    session.characters.forEach(ch => {
+        return transformId(ch)
+    })
 
     return response.code(200).send(session)
 }

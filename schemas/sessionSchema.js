@@ -12,9 +12,7 @@ const sessionSchema = new mongoose.Schema({
     },
     currency: {
         type: Object,
-        default: {
-            "Money": 0
-        }
+        default: null
     },
     move: {
         type: Number,
@@ -22,7 +20,7 @@ const sessionSchema = new mongoose.Schema({
     },
     customFields: {
         type: Object,
-        default: {}
+        default: null
     },
     adminNotes:{
         type: Array,
@@ -76,7 +74,7 @@ const sessionSchema = new mongoose.Schema({
     quests: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Quest',
-        default: null
+        default: []
     }
 }, {
     toJSON: { virtuals: true },
