@@ -24,6 +24,10 @@ const perkSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    type: {
+        type: String,
+        default: "perk"
+    },
     adminNotes:{
         type: Array,
         default: null
