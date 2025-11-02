@@ -2,7 +2,7 @@ import Session from '../schemas/sessionSchema.js'
 import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateSession } from '../utils/entityPopulator.js';
 import { transformId } from '../utils/IDConverter.js'
-
+import { sortArraysByOneField } from '../utils/filtration.js';
 
 export const getSessions = async (request, response) => {
     const sessions = await Session.find();
@@ -24,6 +24,8 @@ export const getSessionById = async (request, response) => {
     session.characters.forEach(ch => {
         return transformId(ch)
     })
+
+    sortArraysByOneField([session.perks, session.weapons, session.armors, session.medicines, session.inventories], 'name')
 
     return response.code(200).send(session)
 }

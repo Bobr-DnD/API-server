@@ -2,6 +2,7 @@ import Character from '../schemas/characterSchema.js'
 import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateEffects } from '../utils/characterHelper.js'
 import { populateCharacter } from '../utils/entityPopulator.js'
+import { sortByTwoFields } from '../utils/filtration.js'
 
 export const getCharacters = async (request, response) => {
     const characters = await Character.find();
@@ -20,6 +21,7 @@ export const getCharacterById = async (request, response) => {
     }
 
     character.effects = await populateEffects(character.effects);
+    sortByTwoFields(character.perks, 'type', 'name')
 
     return response.code(200).send(character)
 }
@@ -36,7 +38,7 @@ export const updateCharacter = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
 
     const character = await populateCharacter(
-        Character.findByIdAndUpdate(objectId, request.body, {new: true, runValidators: true})
+        Character.findByIdAndUpdate(objectId, request.body, { new: true, runValidators: true })
     ).exec();
 
     character.effects = await populateEffects(character.effects);
