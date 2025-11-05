@@ -42,14 +42,14 @@ const characterSchema = new mongoose.Schema({
     },
     health: {
         type: [Object],
-        default: {
+        default: [{
             name: "Здоров'я",
             min: 0,
             max: 25,
             value: 25,
             healing: 0,
             colors: ["#3E5F44", "#FABC3F", "#8E1616"]
-        }
+        }]
     },
     characteristics: {
         type: Object,
