@@ -42,14 +42,7 @@ const characterSchema = new mongoose.Schema({
     },
     health: {
         type: [Object],
-        default: [{
-            name: "Здоров'я",
-            min: 0,
-            max: 25,
-            value: 25,
-            healing: 0,
-            colors: ["#3E5F44", "#FABC3F", "#8E1616"]
-        }]
+        default: []
     },
     characteristics: {
         type: Object,
@@ -64,11 +57,11 @@ const characterSchema = new mongoose.Schema({
         default: null
     },
     adminNotes: {
-        type: Array,
+        type: String,
         default: null
     },
     playerNotes: {
-        type: Array,
+        type: String,
         default: null
     },
     session: {
@@ -76,10 +69,10 @@ const characterSchema = new mongoose.Schema({
         ref: 'Session',
         require: [true, 'Character should have a session']
     },
-    quest: {
-        type: mongoose.Schema.ObjectId,
+    quest: { //TODO rename to quests after BD migration
+        type: [mongoose.Schema.ObjectId],
         ref: 'Quest',
-        default: null
+        default: []
     },
     weapons: {
         type: [mongoose.Schema.ObjectId],

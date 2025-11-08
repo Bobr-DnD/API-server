@@ -27,6 +27,7 @@ export function populateSession(query) {
         'perks',
         'fractions',
         'quests',
+        {path: 'characters', populate: ['weapons', 'armor', 'perks', 'medicines', 'inventory', 'quest']}
     ])
 }
 
