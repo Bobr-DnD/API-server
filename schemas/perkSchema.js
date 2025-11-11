@@ -26,7 +26,7 @@ const perkSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['perk', 'status', 'skill'],
+        enum: ['perk', 'status', 'skill', 'antiperk'],
         default: 'perk'
     },
     adminNotes:{

@@ -23,16 +23,7 @@ const weaponSchema = new mongoose.Schema({
     },
     damage: {
         type: [Object],
-        default: [
-            {
-                damage: "1d6",
-                type: "Колючий"
-            },
-            {
-                damage: "1d6+2",
-                type: "Ріжучий/Рубаючий"
-            }
-        ]
+        default: []
     },
     adminNotes: {
         type: Array,

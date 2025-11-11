@@ -9,7 +9,7 @@ export function populateCharacter(query) {
         'effects',
         'medicines',
         'inventory',
-        'quest',
+        'quests',
         { path: 'medicines', populate: ['effect', 'addictionEffect', 'recipe'] }
     ]);
 }
@@ -27,7 +27,7 @@ export function populateSession(query) {
         'perks',
         'fractions',
         'quests',
-        {path: 'characters', populate: ['weapons', 'armor', 'perks', 'medicines', 'inventory', 'quest']}
+        {path: 'characters', populate: ['weapons', 'armor', 'perks', 'medicines', 'inventory', 'quests']}
     ])
 }
 

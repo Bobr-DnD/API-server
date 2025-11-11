@@ -1,6 +1,7 @@
 import Enemy from '../schemas/enemySchema.js'
 import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateEnemy } from '../utils/entityPopulator.js';
+import { addItem } from './sessionController.js';
 
 export const getEnemies = async (request, response) => {
     const enemies = await Enemy.find();
@@ -26,6 +27,9 @@ export const createEnemy = async (request, response) => {
     if (!enemy) {
         return response.code(404).send({ error: 'Can`t create enemy' })
     }
+
+    addItem({sessionId: request.body.session, id: enemy.id, field: 'enemies'})
+
     return response.code(201).send(enemy)
 }
 
@@ -33,7 +37,7 @@ export const updateEnemy = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
 
     const enemy = await populateEnemy(
-        Enemy.findByIdAndUpdate(objectId, request.body, {new: true, runValidators: true})
+        Enemy.findByIdAndUpdate(objectId, request.body, { new: true, runValidators: true })
     ).exec();
 
     if (!enemy) {

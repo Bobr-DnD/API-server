@@ -1,6 +1,7 @@
 import Medicine from '../schemas/medicinesSchema.js'
 import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateMedicine } from '../utils/entityPopulator.js';
+import { addItem } from './sessionController.js';
 
 export const getMedicines = async (request, response) => {
     const medicines = await Medicine.find();
@@ -26,6 +27,9 @@ export const createMedicine = async (request, response) => {
     if (!medicine) {
         return response.code(404).send({ error: 'Can`t create medicine' })
     }
+
+    addItem({sessionId: request.body.session, id: medicine.id, field: 'medicines'})
+
     return response.code(201).send(medicine)
 }
 

@@ -9,8 +9,8 @@ const characterSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        required: [true, 'Character should have a photo'],
-        trim: true
+        trim: true,
+        default: ''
     },
     gender: {
         type: String,
@@ -69,7 +69,7 @@ const characterSchema = new mongoose.Schema({
         ref: 'Session',
         require: [true, 'Character should have a session']
     },
-    quest: { //TODO rename to quests after BD migration
+    quests: { 
         type: [mongoose.Schema.ObjectId],
         ref: 'Quest',
         default: []

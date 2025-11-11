@@ -1,5 +1,6 @@
 import { transformArray, transformId } from '../utils/IDConverter.js'
 import { toObjectId } from '../utils/ObjectIdConverter.js'
+import { addItem } from './sessionController.js'
 
 export const getEntities = (collection) => async (request, response) => {
     const object = await collection().find().toArray()
@@ -15,8 +16,10 @@ export const getEntityById = (collection) => async (request, response) => {
     return response.code(200).send(transformId(object))
 }
 
-export const createEntity = (model) => async (request, response) => {
+export const createEntity = (model, field) => async (request, response) => {
     const object = await model.create(request.body)
+    
+    addItem({sessionId: request.body.session, id: object.id, field })
     return response.code(201).send(object)
 }
 

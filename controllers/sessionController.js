@@ -10,7 +10,7 @@ export const getSessions = async (request, response) => {
 }
 
 export const getSessionById = async (request, response) => {
-    
+
     const objectId = toObjectId(request.params.id, response)
 
     const session = await populateSession(
@@ -46,7 +46,7 @@ export const updateSession = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
 
     const session = await populateSession(
-        Session.findByIdAndUpdate(objectId, request.body, {new: true, runValidators: true})
+        Session.findByIdAndUpdate(objectId, request.body, { new: true, runValidators: true })
     ).exec();
 
     if (!session) {
@@ -65,4 +65,16 @@ export const deleteSession = async (request, response) => {
     }
 
     return response.code(200).send({ status: 'Success' })
+}
+
+export const addItem = async (opts) => {
+    let session = await Session.findById(opts.sessionId)
+
+    if (!session) {
+        return response.code(404).send({ error: `Session with ID ${objectId} not found` })
+    }
+
+    session[opts.field].push(opts.id)
+    session = await Session.findByIdAndUpdate(opts.sessionId, session, { new: true, runValidators: true })
+
 }
