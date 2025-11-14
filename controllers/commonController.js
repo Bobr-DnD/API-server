@@ -19,7 +19,7 @@ export const getEntityById = (collection) => async (request, response) => {
 export const createEntity = (model, field) => async (request, response) => {
     const object = await model.create(request.body)
     
-    addItem({sessionId: request.body.session, id: object.id, field })
+    await addItem({sessionId: request.body.session, id: object.id, field })
     return response.code(201).send(object)
 }
 

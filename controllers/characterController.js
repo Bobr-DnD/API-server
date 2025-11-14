@@ -1,5 +1,5 @@
 import Character from '../schemas/characterSchema.js'
-import { addItem } from './sessionController.js'
+import { addItem, removeItem } from './sessionController.js'
 import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateEffects } from '../utils/characterHelper.js'
 import { populateCharacter } from '../utils/entityPopulator.js'
@@ -32,7 +32,7 @@ export const createCharacter = async (request, response) => {
     if (!character) {
         return response.code(404).send({ error: 'Can`t create character' })
     }
-    addItem({sessionId: request.body.session, id: character.id, field: 'characters'})
+    await addItem({sessionId: request.body.session, id: character.id, field: 'characters'})
 
     return response.code(201).send(character)
 }
@@ -61,6 +61,7 @@ export const deleteCharacter = async (request, response) => {
     if (!character) {
         return response.code(404).send({ error: `Character with ID ${objectId} not found` })
     }
-
-    return response.code(200).send({ status: 'Success' })
+    
+    await removeItem({sessionId: character.session, id: character.id, field: 'characters'})
+    return response.code(200).send({ status: 'Success', id: character.id })
 }

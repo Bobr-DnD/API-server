@@ -71,10 +71,22 @@ export const addItem = async (opts) => {
     let session = await Session.findById(opts.sessionId)
 
     if (!session) {
-        return response.code(404).send({ error: `Session with ID ${objectId} not found` })
+        return response.code(404).send({ error: `Session with ID ${opts.sessionId} not found` })
     }
 
     session[opts.field].push(opts.id)
     session = await Session.findByIdAndUpdate(opts.sessionId, session, { new: true, runValidators: true })
 
+}
+
+export const removeItem = async (opts) => {
+    let session = await Session.findById(opts.sessionId)
+
+    if (!session) {
+        return response.code(404).send({ error: `Session with ID ${opts.sessionId} not found` })
+    }
+
+    const index = session[opts.field].findIndex(entity => String(entity) === opts.id)
+    if (index !== -1) session[opts.field].splice(index, 1)
+    session = await Session.findByIdAndUpdate(opts.sessionId, session, { new: true, runValidators: true })
 }

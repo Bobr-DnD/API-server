@@ -28,7 +28,7 @@ export const createMedicine = async (request, response) => {
         return response.code(404).send({ error: 'Can`t create medicine' })
     }
 
-    addItem({sessionId: request.body.session, id: medicine.id, field: 'medicines'})
+    await addItem({sessionId: request.body.session, id: medicine.id, field: 'medicines'})
 
     return response.code(201).send(medicine)
 }
