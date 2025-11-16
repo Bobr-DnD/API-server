@@ -25,8 +25,12 @@ const weaponSchema = new mongoose.Schema({
         type: [Object],
         default: []
     },
+    playerNotes: {
+        type: String,
+        default: null
+    },
     adminNotes: {
-        type: Array,
+        type: [Object],
         default: null
     },
     requirement: {
