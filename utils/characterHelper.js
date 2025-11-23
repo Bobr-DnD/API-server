@@ -1,4 +1,5 @@
 import Effect from '../schemas/effectSchema.js'
+import { createId } from './IDConverter.js'
 
 export async function populateEffects(effects = []) {
     if (!Array.isArray(effects) || effects.length === 0) {
@@ -19,4 +20,9 @@ export async function populateEffects(effects = []) {
             }
         })
     )
+}
+
+export async function addHealthId(field) {
+    if (field.id) return
+    field.id = createId().toString()
 }

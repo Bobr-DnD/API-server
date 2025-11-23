@@ -1,7 +1,7 @@
 import Character from '../schemas/characterSchema.js'
 import { addItem, removeItem } from './sessionController.js'
 import { toObjectId } from '../utils/ObjectIdConverter.js'
-import { populateEffects } from '../utils/characterHelper.js'
+import { populateEffects, addHealthId } from '../utils/characterHelper.js'
 import { populateCharacter } from '../utils/entityPopulator.js'
 import { sortByTwoFields } from '../utils/filtration.js'
 
@@ -32,7 +32,7 @@ export const createCharacter = async (request, response) => {
     if (!character) {
         return response.code(404).send({ error: 'Can`t create character' })
     }
-    await addItem({sessionId: request.body.session, id: character.id, field: 'characters'})
+    await addItem({ sessionId: request.body.session, id: character.id, field: 'characters' })
 
     return response.code(201).send(character)
 }
@@ -40,12 +40,13 @@ export const createCharacter = async (request, response) => {
 export const updateCharacter = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
 
+    request.body.health.forEach(h => addHealthId(h))
+
     const character = await populateCharacter(
         Character.findByIdAndUpdate(objectId, request.body, { new: true, runValidators: true })
     ).exec();
 
     character.effects = await populateEffects(character.effects);
-
 
     if (!character) {
         return response.code(404).send({ error: `Character with ID ${objectId} not found` })
@@ -57,11 +58,13 @@ export const updateCharacter = async (request, response) => {
 export const deleteCharacter = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
 
+    if (request.body.health) request.body.health.forEach(h => addHealthId(h))
+
     const character = await Character.findByIdAndDelete(objectId)
     if (!character) {
         return response.code(404).send({ error: `Character with ID ${objectId} not found` })
     }
-    
-    await removeItem({sessionId: character.session, id: character.id, field: 'characters'})
+
+    await removeItem({ sessionId: character.session, id: character.id, field: 'characters' })
     return response.code(200).send({ status: 'Success', id: character.id })
 }

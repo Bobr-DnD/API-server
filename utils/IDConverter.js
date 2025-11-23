@@ -1,3 +1,5 @@
+import mongoose from "mongoose"
+
 export function transformId(doc) {
     if (!doc) return doc
     const { _id, ...rest } = doc
@@ -7,4 +9,8 @@ export function transformId(doc) {
 
 export function transformArray(docs) {
     return docs.map(transformId)
+}
+
+export function createId(){
+    return new mongoose.Types.ObjectId()
 }
