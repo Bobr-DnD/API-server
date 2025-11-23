@@ -28,6 +28,9 @@ export const getCharacterById = async (request, response) => {
 }
 
 export const createCharacter = async (request, response) => {
+
+    if (request.body.health) request.body.health.forEach(h => addHealthId(h))
+
     const character = await Character.create(request.body)
     if (!character) {
         return response.code(404).send({ error: 'Can`t create character' })
@@ -40,7 +43,7 @@ export const createCharacter = async (request, response) => {
 export const updateCharacter = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
 
-    request.body.health.forEach(h => addHealthId(h))
+    if (request.body.health) request.body.health.forEach(h => addHealthId(h))
 
     const character = await populateCharacter(
         Character.findByIdAndUpdate(objectId, request.body, { new: true, runValidators: true })
@@ -57,8 +60,6 @@ export const updateCharacter = async (request, response) => {
 
 export const deleteCharacter = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
-
-    if (request.body.health) request.body.health.forEach(h => addHealthId(h))
 
     const character = await Character.findByIdAndDelete(objectId)
     if (!character) {
