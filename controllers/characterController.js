@@ -4,6 +4,7 @@ import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateEffects, addHealthId } from '../utils/characterHelper.js'
 import { populateCharacter } from '../utils/entityPopulator.js'
 import { sortByTwoFields } from '../utils/filtration.js'
+import { parseCharacterRequest } from '../utils/fileHandler.js'
 
 export const getCharacters = async (request, response) => {
     const characters = await Character.find();
@@ -29,24 +30,30 @@ export const getCharacterById = async (request, response) => {
 
 export const createCharacter = async (request, response) => {
 
-    if (request.body.health) request.body.health.forEach(h => addHealthId(h))
+    const {character_data, image} = await parseCharacterRequest(request)
 
-    const character = await Character.create(request.body)
+    if (image) character_data.image = image
+    if (character_data.health) character_data.health.forEach(h => addHealthId(h))
+
+    const character = await Character.create(character_data)
     if (!character) {
         return response.code(404).send({ error: 'Can`t create character' })
     }
-    await addItem({ sessionId: request.body.session, id: character.id, field: 'characters' })
+    await addItem({ sessionId: character_data.session, id: character.id, field: 'characters' })
 
     return response.code(201).send(character)
 }
 
 export const updateCharacter = async (request, response) => {
-    const objectId = toObjectId(request.params.id, response)
 
-    if (request.body.health) request.body.health.forEach(h => addHealthId(h))
+    const objectId = toObjectId(request.params.id, response)
+    const {character_data, image} = await parseCharacterRequest(request)
+    
+    if (image) character_data.image = image
+    if (character_data.health) character_data.health.forEach(h => addHealthId(h))
 
     const character = await populateCharacter(
-        Character.findByIdAndUpdate(objectId, request.body, { new: true, runValidators: true })
+        Character.findByIdAndUpdate(objectId, character_data, { new: true, runValidators: true })
     ).exec();
 
     character.effects = await populateEffects(character.effects);

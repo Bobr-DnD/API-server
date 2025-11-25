@@ -2,6 +2,7 @@ import Fastify from 'fastify'
 import dotenv from 'dotenv'
 import cors from '@fastify/cors'
 import db from './plugins/mongoDB.js'
+import multipart from '@fastify/multipart'
 import errorHandler from './plugins/errorHandler.js'
 import charactersRoute from './routes/characterRouter.js'
 import sessionRouter from './routes/sessionRouter.js'
@@ -33,6 +34,8 @@ await fastify.register(cors, { origin: ['http://127.0.0.1:3000', 'http://localho
 await fastify.register(db, {use_local: process.env.DB_LOCAL === 'true'})
 await fastify.register(mongoosePlugin, {use_local: process.env.DB_LOCAL === 'true'})
 await fastify.register(errorHandler)
+
+fastify.register(multipart);
 
 // Register routes
 fastify.register(charactersRoute, {prefix: '/character'})
