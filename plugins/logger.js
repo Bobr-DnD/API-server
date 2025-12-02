@@ -17,6 +17,6 @@ export default fp(async function customLogger(fastify, opts) {
       stack: error.stack
     }, `[ERR] ${request.method} ${request.url} → ${reply.statusCode}`)
 
-    reply.code(500).send({ error: 'Internal Server Error' })
+    reply.code(500).send({ error: error.message || 'Internal Server Error' })
   })
 })

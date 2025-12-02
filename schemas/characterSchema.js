@@ -10,7 +10,7 @@ const characterSchema = new mongoose.Schema({
     image: {
         type: String,
         trim: true,
-        default: ''
+        default: null
     },
     gender: {
         type: String,

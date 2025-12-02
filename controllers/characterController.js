@@ -4,7 +4,6 @@ import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateEffects, addHealthId } from '../utils/characterHelper.js'
 import { populateCharacter } from '../utils/entityPopulator.js'
 import { sortByTwoFields } from '../utils/filtration.js'
-import { parseCharacterRequest } from '../utils/fileHandler.js'
 
 export const getCharacters = async (request, response) => {
     const characters = await Character.find();
@@ -30,9 +29,8 @@ export const getCharacterById = async (request, response) => {
 
 export const createCharacter = async (request, response) => {
 
-    const {character_data, image} = await parseCharacterRequest(request)
+    const character_data = request.body
 
-    if (image) character_data.image = image
     if (character_data.health) character_data.health.forEach(h => addHealthId(h))
 
     const character = await Character.create(character_data)
@@ -47,9 +45,8 @@ export const createCharacter = async (request, response) => {
 export const updateCharacter = async (request, response) => {
 
     const objectId = toObjectId(request.params.id, response)
-    const {character_data, image} = await parseCharacterRequest(request)
+    const character_data = request.body
     
-    if (image) character_data.image = image
     if (character_data.health) character_data.health.forEach(h => addHealthId(h))
 
     const character = await populateCharacter(

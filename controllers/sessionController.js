@@ -3,7 +3,6 @@ import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateSession } from '../utils/entityPopulator.js';
 import { transformId } from '../utils/IDConverter.js'
 import { sortArraysByOneField, sortByTwoFields } from '../utils/filtration.js';
-import { parseSessionRequest } from '../utils/fileHandler.js';
 
 export const getSessions = async (request, response) => {
     const sessions = await Session.find();
@@ -37,9 +36,7 @@ export const getSessionById = async (request, response) => {
 
 export const createSession = async (request, response) => {
 
-    const { session_data, image } = await parseSessionRequest(request)
-
-    if (image) session_data.image = image
+    const session_data = request.body
 
     const session = await Session.create(session_data)
     if (!session) {
@@ -51,9 +48,7 @@ export const createSession = async (request, response) => {
 export const updateSession = async (request, response) => {
 
     const objectId = toObjectId(request.params.id, response)
-    const { session_data, image } = await parseSessionRequest(request)
-
-    if (image) session_data.image = image
+    const session_data = request.body
 
     const session = await populateSession(
         Session.findByIdAndUpdate(objectId, session_data, { new: true, runValidators: true })

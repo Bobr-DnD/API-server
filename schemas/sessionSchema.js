@@ -9,7 +9,7 @@ const sessionSchema = new mongoose.Schema({
     image:{
         type: String,
         trim: true,
-        default: ''
+        default: null
     },
     currency: {
         type: Object,
