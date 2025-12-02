@@ -25,7 +25,7 @@ export const uploadFile = async (request, response) => {
     return response.code(200).send(publicUrl)
 }
 
-export const deleteFile = async (request, response) => {  
-    await bucket.file(`images/${request.body.fileName}`).delete();
-    return response.code(200).send({ status: 'Success' })
+export const deleteFile = async (request, response) => { 
+    await bucket.file(`images/${request.params.fileName}`).delete();
+    return response.code(200).send({ message: 'Success' })
 }

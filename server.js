@@ -34,11 +34,11 @@ await fastify.register(customLogger)
 await fastify.register(cors, { origin: ['http://127.0.0.1:3000', 'http://localhost:3000', 'http://localhost:8080', 'http://127.0.0.1:8080', ['*']], credentials: true })
 await fastify.register(db, { use_local: process.env.DB_LOCAL === 'true' })
 await fastify.register(mongoosePlugin, { use_local: process.env.DB_LOCAL === 'true' })
-await fastify.register(errorHandler, {
-  limits: { fileSize: 10 * 1024 * 1024 }
-})
+await fastify.register(errorHandler)
 
-await fastify.register(multipart);
+await fastify.register(multipart, {
+  limits: { fileSize: 10 * 1024 * 1024 }
+});
 
 // Register routes
 fastify.register(charactersRoute, { prefix: '/character' })
