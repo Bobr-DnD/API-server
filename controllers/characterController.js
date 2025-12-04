@@ -21,8 +21,10 @@ export const getCharacterById = async (request, response) => {
         return response.code(404).send({ error: `Character with ID ${objectId} not found` })
     }
 
-    character.effects = await populateEffects(character.effects);
+    populateEffects(character.effects, character.effectsDuration);
+    
     sortByTwoFields(character.perks, 'type', 'name')
+    sortByTwoFields(character.entities, 'type', 'name')
 
     return response.code(200).send(character)
 }
@@ -37,7 +39,7 @@ export const createCharacter = async (request, response) => {
     if (!character) {
         return response.code(404).send({ error: 'Can`t create character' })
     }
-    await addItem({ sessionId: character_data.session, id: character.id, field: 'characters' })
+    await addItem({ sessionId: character_data.session, id: character.id, field: 'characters' }, response)
 
     return response.code(201).send(character)
 }
@@ -53,11 +55,14 @@ export const updateCharacter = async (request, response) => {
         Character.findByIdAndUpdate(objectId, character_data, { new: true, runValidators: true })
     ).exec();
 
-    character.effects = await populateEffects(character.effects);
-
     if (!character) {
         return response.code(404).send({ error: `Character with ID ${objectId} not found` })
     }
+
+    character.effectsParsed = populateEffects(character.effects, character.effectsDuration);
+    
+    sortByTwoFields(character.perks, 'type', 'name')
+    sortByTwoFields(character.entities, 'type', 'name')
 
     return response.code(200).send(character)
 }

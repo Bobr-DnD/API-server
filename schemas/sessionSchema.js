@@ -27,14 +27,22 @@ const sessionSchema = new mongoose.Schema({
         type: Array,
         default: null
     },
+    entityTypes:{
+        type: [String],
+        default: ['Armor', 'Weapon', 'Medicine']
+    },
+    enemytypes: {
+        type: [String],
+        default: ['boss', 'enemy']
+    },
     characters: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Character',
         default: []
     },
-    armors:{
+    entities:{
         type: [mongoose.Schema.ObjectId],
-        ref: 'Armor',
+        ref: 'Entity',
         default: []
     },
     enemies:{
@@ -42,24 +50,9 @@ const sessionSchema = new mongoose.Schema({
         ref: 'Enemy',
         default: []
     },
-    inventories:{
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Inventory',
-        default: []
-    },
-    medicines:{
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Medicine',
-        default: []
-    },
     perks:{
         type: [mongoose.Schema.ObjectId],
         ref: 'Perk',
-        default: []
-    },
-    weapons:{
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Weapon',
         default: []
     },
     effects:{

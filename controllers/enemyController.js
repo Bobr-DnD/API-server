@@ -28,7 +28,7 @@ export const createEnemy = async (request, response) => {
         return response.code(404).send({ error: 'Can`t create enemy' })
     }
 
-    await addItem({sessionId: request.body.session, id: enemy.id, field: 'enemies'})
+    await addItem({sessionId: request.body.session, id: enemy.id, field: 'enemies'}, response)
 
     return response.code(201).send(enemy)
 }

@@ -1,25 +1,16 @@
-import Effect from '../schemas/effectSchema.js'
 import { createId } from './IDConverter.js'
 
-export async function populateEffects(effects = []) {
+export function populateEffects(effects = [], effectsDuration = []) {
     if (!Array.isArray(effects) || effects.length === 0) {
+        console.log('bad');
+
         return []
     }
 
-    return Promise.all(
-        effects.map(async (e) => {
-            try {
-                if (!e || !e.id) return e
-
-                const found = await Effect.findById(e.id)
-                return { ...e, effect: found }
-
-            } catch (err) {
-                console.warn(`Failed to populate effect ${e.id}:`, err.message)
-                return e
-            }
-        })
-    )
+    effects.forEach((effect, index) => {
+        effect.timeLeft = effectsDuration[index]
+    })
+    
 }
 
 export async function addHealthId(field) {

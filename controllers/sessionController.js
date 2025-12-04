@@ -3,6 +3,7 @@ import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateSession } from '../utils/entityPopulator.js';
 import { transformId } from '../utils/IDConverter.js'
 import { sortArraysByOneField, sortByTwoFields } from '../utils/filtration.js';
+import { populateEffects } from '../utils/characterHelper.js';
 
 export const getSessions = async (request, response) => {
     const sessions = await Session.find();
@@ -25,11 +26,15 @@ export const getSessionById = async (request, response) => {
         return transformId(ch)
     })
 
-    sortArraysByOneField([session.weapons, session.armors, session.medicines, session.inventories], 'name')
+    sortByTwoFields(session.entities, 'type', 'name')
+    sortByTwoFields(session.perks, 'type', 'name')
+    session.characters.forEach((ch) => {
+        populateEffects(ch.effects, ch.effectsDuration);
+    })
+
     session.characters.map(ch => {
         sortByTwoFields(ch.perks, 'type', 'name')
     })
-    sortByTwoFields(session.perks, 'type', 'name')
 
     return response.code(200).send(session)
 }
@@ -55,8 +60,19 @@ export const updateSession = async (request, response) => {
     ).exec();
 
     if (!session) {
-        return response.code(404).send({ error: `Character with ID ${objectId} not found` })
+        return response.code(404).send({ error: `Sesdion with ID ${objectId} not found` })
     }
+
+    session.characters.forEach(ch => {
+        return transformId(ch)
+    })
+
+    sortByTwoFields(session.entities, 'type', 'name')
+    sortByTwoFields(session.perks, 'type', 'name')
+
+    session.characters.map(ch => {
+        sortByTwoFields(ch.perks, 'type', 'name')
+    })
 
     return response.code(200).send(session)
 }
@@ -72,7 +88,7 @@ export const deleteSession = async (request, response) => {
     return response.code(200).send({ status: 'Success' })
 }
 
-export const addItem = async (opts) => {
+export const addItem = async (opts, response) => {
     let session = await Session.findById(opts.sessionId)
 
     if (!session) {

@@ -19,7 +19,7 @@ export const getEntityById = (collection) => async (request, response) => {
 export const createEntity = (model, field) => async (request, response) => {
     const object = await model.create(request.body)
     
-    await addItem({sessionId: request.body.session, id: object.id, field })
+    await addItem({sessionId: request.body.session, id: object.id, field }, response)
     return response.code(201).send(object)
 }
 
@@ -38,5 +38,5 @@ export const deleteEntity = (collection) => async (request, response) => {
     const result = await collection().deleteOne({ _id: objectId })
     if (result.deletedCount === 0) return response.code(404).send({ error: `${entity} not found` })
 
-    return response.send({ success: true })
+    return response.code(201).send({ success: true })
 }

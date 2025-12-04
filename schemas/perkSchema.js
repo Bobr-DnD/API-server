@@ -6,12 +6,15 @@ const perkSchema = new mongoose.Schema({
         required: [true, 'Perk should have a name'],
         trim: true
     },
-    effect: {
-        type: Object,
-        required: [true, 'Perk should have an effect'],
+    descriptions: {
+        type: [String],
+        required: [true, 'Perk should have a description'],
         trim: true
     },
-    /*effect structure: effect:{"description":"text if you need some", "A":1, "health":30} */
+    effects: {
+        type: [Object],
+        default: []
+    },
     requirement: {
         type: Object,
         default: null
@@ -29,7 +32,7 @@ const perkSchema = new mongoose.Schema({
         enum: ['perk', 'status', 'skill', 'antiperk'],
         default: 'perk'
     },
-    adminNotes:{
+    adminNotes: {
         type: Array,
         default: null
     }

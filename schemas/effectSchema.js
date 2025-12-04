@@ -18,6 +18,10 @@ const effectSchema = new mongoose.Schema({
     duration: {
         type: Number,
         default: 4
+    },
+    timeLeft: {
+        type: Number,
+        default: null
     }
 },
     {
