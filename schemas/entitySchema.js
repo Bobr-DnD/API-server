@@ -19,13 +19,9 @@ const entitySchema = new mongoose.Schema({
         type: [String],
         default: []
     },
-    rangeFields: {
-        type: [Object],
-        default: []
-    },
     characteristics: {
-        type: [Object],
-        default: []
+        type: Object,
+        default: null,
     },
     requirement: {
         type: Object,

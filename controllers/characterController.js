@@ -1,7 +1,7 @@
 import Character from '../schemas/characterSchema.js'
 import { addItem, removeItem } from './sessionController.js'
 import { toObjectId } from '../utils/ObjectIdConverter.js'
-import { populateEffects, addHealthId } from '../utils/characterHelper.js'
+import { populateEffects, addId } from '../utils/characterHelper.js'
 import { populateCharacter } from '../utils/entityPopulator.js'
 import { sortByTwoFields } from '../utils/filtration.js'
 
@@ -33,7 +33,7 @@ export const createCharacter = async (request, response) => {
 
     const character_data = request.body
 
-    if (character_data.health) character_data.health.forEach(h => addHealthId(h))
+    if (character_data.health) character_data.health.forEach(h => addId(h))
 
     const character = await Character.create(character_data)
     if (!character) {
@@ -48,8 +48,6 @@ export const updateCharacter = async (request, response) => {
 
     const objectId = toObjectId(request.params.id, response)
     const character_data = request.body
-    
-    if (character_data.health) character_data.health.forEach(h => addHealthId(h))
 
     const character = await populateCharacter(
         Character.findByIdAndUpdate(objectId, character_data, { new: true, runValidators: true })

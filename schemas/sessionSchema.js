@@ -6,7 +6,7 @@ const sessionSchema = new mongoose.Schema({
         required: [true, 'Session should have a name'],
         trim: true
     },
-    image:{
+    image: {
         type: String,
         trim: true,
         default: null
@@ -23,13 +23,15 @@ const sessionSchema = new mongoose.Schema({
         type: Object,
         default: null
     },
-    adminNotes:{
+    adminNotes: {
         type: Array,
         default: null
     },
-    entityTypes:{
-        type: [String],
-        default: ['Armor', 'Weapon', 'Medicine']
+    entityTypes: {
+        type: [Object],
+        id: String,
+        icon: String,
+        name: String
     },
     enemytypes: {
         type: [String],
@@ -40,22 +42,22 @@ const sessionSchema = new mongoose.Schema({
         ref: 'Character',
         default: []
     },
-    entities:{
+    entities: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Entity',
         default: []
     },
-    enemies:{
+    enemies: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Enemy',
         default: []
     },
-    perks:{
+    perks: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Perk',
         default: []
     },
-    effects:{
+    effects: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Effect',
         default: []

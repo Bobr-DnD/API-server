@@ -13,7 +13,7 @@ export function populateEffects(effects = [], effectsDuration = []) {
     
 }
 
-export async function addHealthId(field) {
+export async function addId(field) {
     if (field.id) return
     field.id = createId().toString()
 }

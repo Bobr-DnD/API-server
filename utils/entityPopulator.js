@@ -5,6 +5,7 @@ export function populateCharacter(query) {
         'effects',
         'entities',
         'quests',
+        {path: 'entities', populate: ['effects']}
     ]);
 }
 

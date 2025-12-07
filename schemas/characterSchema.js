@@ -24,12 +24,12 @@ const characterSchema = new mongoose.Schema({
     },
     class: {
         type: String,
-        trime: true,
+        trim: true,
         default: null
     },
     race: {
         type: String,
-        trime: true,
+        trim: true,
         default: null
     },
     level: {
@@ -68,7 +68,7 @@ const characterSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    effectsDuration:{
+    effectsDuration: {
         type: [Number],
         default: []
     },
@@ -76,12 +76,8 @@ const characterSchema = new mongoose.Schema({
         type: [mongoose.Schema.ObjectId],
         ref: 'Effect',
         default: [],
-        effect:{
-            type: Object
-        },
-        timeLeft:{
-            type:Number
-        }
+        effect: Object,
+        timeLeft: Number
     },
     quests: {
         type: [mongoose.Schema.ObjectId],

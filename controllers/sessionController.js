@@ -3,7 +3,7 @@ import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateSession } from '../utils/entityPopulator.js';
 import { transformId } from '../utils/IDConverter.js'
 import { sortArraysByOneField, sortByTwoFields } from '../utils/filtration.js';
-import { populateEffects } from '../utils/characterHelper.js';
+import { populateEffects, addId } from '../utils/characterHelper.js';
 
 export const getSessions = async (request, response) => {
     const sessions = await Session.find();
@@ -42,6 +42,8 @@ export const getSessionById = async (request, response) => {
 export const createSession = async (request, response) => {
 
     const session_data = request.body
+    if (session_data.entityTypes) session_data.entityTypes.forEach(h => addId(h))
+    if (session_data.enemyTypes) session_data.enemyTypes.forEach(h => addId(h))
 
     const session = await Session.create(session_data)
     if (!session) {
