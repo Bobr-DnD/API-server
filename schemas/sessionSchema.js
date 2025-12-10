@@ -11,31 +11,45 @@ const sessionSchema = new mongoose.Schema({
         trim: true,
         default: null
     },
-    currency: {
-        type: Object,
-        default: null
-    },
     move: {
         type: Number,
         default: 0
     },
     customFields: {
         type: Object,
-        default: null
+        default: {}
     },
     adminNotes: {
-        type: Array,
+        type: String,
         default: null
     },
     entityTypes: {
         type: [Object],
+        default: [],
         id: String,
         icon: String,
         name: String
     },
     enemytypes: {
-        type: [String],
-        default: ['boss', 'enemy']
+        type: [Object],
+        default: [],
+        id: String,
+        name: String,
+        icon: String
+    },
+    
+    characteristicsList: {
+        type: [Object],
+        default: [],
+        id: String,
+        name: String
+    },
+    currencyTypes: {
+        type: [Object],
+        default: [],
+        id: String,
+        name: String,
+        icon: String
     },
     characters: {
         type: [mongoose.Schema.ObjectId],

@@ -42,8 +42,11 @@ export const getSessionById = async (request, response) => {
 export const createSession = async (request, response) => {
 
     const session_data = request.body
+    
     if (session_data.entityTypes) session_data.entityTypes.forEach(h => addId(h))
     if (session_data.enemyTypes) session_data.enemyTypes.forEach(h => addId(h))
+    if (session_data.characteristicsList) session_data.characteristicsList.forEach(h => addId(h))
+    if (session_data.currencyTypes) session_data.currencyTypes.forEach(h => addId(h))
 
     const session = await Session.create(session_data)
     if (!session) {
@@ -56,6 +59,11 @@ export const updateSession = async (request, response) => {
 
     const objectId = toObjectId(request.params.id, response)
     const session_data = request.body
+
+    if (session_data.entityTypes) session_data.entityTypes.forEach(h => addId(h))
+    if (session_data.enemyTypes) session_data.enemyTypes.forEach(h => addId(h))
+    if (session_data.characteristicsList) session_data.characteristicsList.forEach(h => addId(h))
+    if (session_data.currencyTypes) session_data.currencyTypes.forEach(h => addId(h))
 
     const session = await populateSession(
         Session.findByIdAndUpdate(objectId, session_data, { new: true, runValidators: true })
