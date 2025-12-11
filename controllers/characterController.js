@@ -1,7 +1,8 @@
 import Character from '../schemas/characterSchema.js'
+import Session from '../schemas/sessionSchema.js'
 import { addItem, removeItem } from './sessionController.js'
 import { toObjectId } from '../utils/ObjectIdConverter.js'
-import { populateEffects, addId } from '../utils/characterHelper.js'
+import { populateEffects, addId, toSessionCharacteristics, toSessionCurrency } from '../utils/characterHelper.js'
 import { populateCharacter } from '../utils/entityPopulator.js'
 import { sortByTwoFields } from '../utils/filtration.js'
 
@@ -22,7 +23,7 @@ export const getCharacterById = async (request, response) => {
     }
 
     populateEffects(character.effects, character.effectsDuration);
-    
+
     sortByTwoFields(character.perks, 'type', 'name')
     sortByTwoFields(character.entities, 'type', 'name')
 
@@ -32,8 +33,12 @@ export const getCharacterById = async (request, response) => {
 export const createCharacter = async (request, response) => {
 
     const character_data = request.body
+    const session = await Session.findById(character_data.session)
 
     if (character_data.health) character_data.health.forEach(h => addId(h))
+
+    character_data.characteristics = toSessionCharacteristics(character_data.characteristics ?? {}, session.characteristicsList)
+    character_data.currency = toSessionCurrency(character_data.currency ?? [], session.currencyTypes)
 
     const character = await Character.create(character_data)
     if (!character) {
@@ -48,6 +53,10 @@ export const updateCharacter = async (request, response) => {
 
     const objectId = toObjectId(request.params.id, response)
     const character_data = request.body
+    const session = await Session.findById(character_data.session)
+
+    character_data.characteristics = toSessionCharacteristics(character_data.characteristics ?? {}, session.characteristicsList)
+    character_data.currency = toSessionCurrency(character_data.currency ?? [], session.currencyTypes)
 
     const character = await populateCharacter(
         Character.findByIdAndUpdate(objectId, character_data, { new: true, runValidators: true })
@@ -58,7 +67,7 @@ export const updateCharacter = async (request, response) => {
     }
 
     character.effectsParsed = populateEffects(character.effects, character.effectsDuration);
-    
+
     sortByTwoFields(character.perks, 'type', 'name')
     sortByTwoFields(character.entities, 'type', 'name')
 

@@ -30,7 +30,7 @@ const sessionSchema = new mongoose.Schema({
         icon: String,
         name: String
     },
-    enemytypes: {
+    enemyTypes: {
         type: [Object],
         default: [],
         id: String,

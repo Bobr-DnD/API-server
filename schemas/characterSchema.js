@@ -48,18 +48,6 @@ const characterSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    health: {
-        type: [Object],
-        default: []
-    },
-    characteristics: {
-        type: Object,
-        default: null
-    },
-    customFields: {
-        type: Object,
-        default: null
-    },
     adminNotes: {
         type: String,
         default: null
@@ -67,6 +55,22 @@ const characterSchema = new mongoose.Schema({
     playerNotes: {
         type: String,
         default: null
+    },
+    characteristics: {
+        type: Object,
+        default: null
+    },
+    currency: {
+        type: [Object],
+        default: null
+    },
+    customFields: {
+        type: Object,
+        default: null
+    },
+    health: {
+        type: [Object],
+        default: [],
     },
     effectsDuration: {
         type: [Number],
