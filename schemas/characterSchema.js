@@ -72,10 +72,6 @@ const characterSchema = new mongoose.Schema({
         type: [Object],
         default: [],
     },
-    effectsDuration: {
-        type: [Number],
-        default: []
-    },
     effects: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Effect',

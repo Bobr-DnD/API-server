@@ -22,8 +22,6 @@ export const getCharacterById = async (request, response) => {
         return response.code(404).send({ error: `Character with ID ${objectId} not found` })
     }
 
-    populateEffects(character.effects, character.effectsDuration);
-
     sortByTwoFields(character.perks, 'type', 'name')
     sortByTwoFields(character.entities, 'type', 'name')
 
@@ -55,6 +53,7 @@ export const updateCharacter = async (request, response) => {
     const character_data = request.body
     const session = await Session.findById(character_data.session)
 
+    if (character_data.health) character_data.health.forEach(h => addId(h))
     character_data.characteristics = toSessionCharacteristics(character_data.characteristics ?? {}, session.characteristicsList)
     character_data.currency = toSessionCurrency(character_data.currency ?? [], session.currencyTypes)
 
@@ -65,8 +64,6 @@ export const updateCharacter = async (request, response) => {
     if (!character) {
         return response.code(404).send({ error: `Character with ID ${objectId} not found` })
     }
-
-    character.effectsParsed = populateEffects(character.effects, character.effectsDuration);
 
     sortByTwoFields(character.perks, 'type', 'name')
     sortByTwoFields(character.entities, 'type', 'name')

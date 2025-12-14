@@ -14,14 +14,6 @@ const effectSchema = new mongoose.Schema({
     effect: {
         type: Object,
         default: null
-    },
-    duration: {
-        type: Number,
-        default: 4
-    },
-    timeLeft: {
-        type: Number,
-        default: null
     }
 },
     {

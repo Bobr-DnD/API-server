@@ -11,10 +11,11 @@ const sessionSchema = new mongoose.Schema({
         trim: true,
         default: null
     },
-    move: {
-        type: Number,
-        default: 0
-    },
+    //TODO probably move is not important field
+    // move: {
+    //     type: Number,
+    //     default: 0
+    // },
     customFields: {
         type: Object,
         default: {}

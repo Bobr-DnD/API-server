@@ -2,6 +2,7 @@ import { createId } from './IDConverter.js'
 import mongoose from 'mongoose';
 import Character from '../schemas/characterSchema.js'
 
+//INFO deprecated function, there is no such functionality now
 export function populateEffects(effects = [], effectsDuration = []) {
     if (!Array.isArray(effects) || effects.length === 0) {
         console.log('bad');
@@ -20,7 +21,7 @@ export function addId(field) {
     field.id = createId().toString()
 }
 
-export function generateId(field) {
+export function generateId() {
     return createId().toString()
 }
 

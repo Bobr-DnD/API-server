@@ -19,18 +19,14 @@ const perkSchema = new mongoose.Schema({
         type: Object,
         default: null
     },
-    cooldown: {
-        type: Number,
-        default: null
-    },
     ranks: {
         type: Number,
         default: 0
     },
     type: {
-        type: String,
-        enum: ['perk', 'status', 'skill', 'antiperk'],
-        default: 'perk'
+        type: Object,
+        name: String,
+        color: String
     },
     adminNotes: {
         type: Array,
