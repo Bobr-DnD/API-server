@@ -28,12 +28,10 @@ export const getSessionById = async (request, response) => {
 
     sortByTwoFields(session.entities, 'type', 'name')
     sortByTwoFields(session.perks, 'type', 'name')
-    session.characters.forEach((ch) => {
-        populateEffects(ch.effects, ch.effectsDuration);
-    })
 
     session.characters.map(ch => {
         sortByTwoFields(ch.perks, 'type', 'name')
+        sortByTwoFields(ch.entities, 'type', 'name')
     })
 
     return response.code(200).send(session)
