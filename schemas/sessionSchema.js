@@ -31,21 +31,26 @@ const sessionSchema = new mongoose.Schema({
         icon: String,
         name: String
     },
-    enemyTypes: {
+    currencyTypes: {
         type: [Object],
         default: [],
         id: String,
         name: String,
         icon: String
     },
-    
     characteristicsList: {
         type: [Object],
         default: [],
         id: String,
         name: String
     },
-    currencyTypes: {
+    questTypes: {
+        type: [Object],
+        default: [],
+        id: String,
+        name: String
+    },
+    enemyTypes: {
         type: [Object],
         default: [],
         id: String,
@@ -75,11 +80,6 @@ const sessionSchema = new mongoose.Schema({
     effects: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Effect',
-        default: []
-    },
-    fractions: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Fraction',
         default: []
     },
     quests: {

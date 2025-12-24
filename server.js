@@ -46,7 +46,6 @@ fastify.register(enemyRouter, { prefix: '/enemy' })
 
 fastify.register(commonRouter, {prefix: '/entity', model: 'Entity', collection: 'entities'})
 fastify.register(commonRouter, { prefix: '/effect', model: 'Effect', collection: 'effects' })
-fastify.register(commonRouter, { prefix: '/fraction', model: 'Fraction', collection: 'fractions' })
 fastify.register(commonRouter, { prefix: '/perk', model: 'Perk', collection: 'perks' })
 fastify.register(commonRouter, { prefix: '/quest', model: 'Quest', collection: 'quests' })
 fastify.register(filesRouter, { prefix: '/storage' })

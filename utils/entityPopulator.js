@@ -17,7 +17,6 @@ export function populateSession(query) {
         'perks',
         'effects',
         'perks',
-        'fractions',
         'quests',
         {path: 'characters', populate: ['entities', 'perks', 'quests', 'effects']},
         {path: 'enemies', populate: ['entities']}

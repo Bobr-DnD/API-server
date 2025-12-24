@@ -1,6 +1,5 @@
 import Entity from '../schemas/entitySchema.js'
 import Effect from '../schemas/effectSchema.js'
-import Fraction from '../schemas/fractionSchema.js'
 import Perk from '../schemas/perkSchema.js'
 import Quest from '../schemas/questSchema.js'
 import { getEntities, getEntityById, createEntity, updateEntity, deleteEntity } from '../controllers/commonController.js'
@@ -10,7 +9,6 @@ export default async function commonRouter(fastify, opts) {
     const models = {
         Entity,
         Effect,
-        Fraction,
         Perk,
         Quest,
     }

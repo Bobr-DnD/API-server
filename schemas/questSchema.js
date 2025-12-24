@@ -13,8 +13,8 @@ const questSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['done', 'active', 'hidden', 'fail'],
-        default: 'hidden'
+        required: [true, 'Quest should have a descritpion'],
+        trim: true
     },
     reward: {
         type: String,
@@ -22,6 +22,9 @@ const questSchema = new mongoose.Schema({
     },
     steps: {
         type: [Object],
+        id:{
+            type: String
+        },
         name: {
             type: String,
             trim: true,
@@ -31,16 +34,11 @@ const questSchema = new mongoose.Schema({
             type: String,
             trim: true,
             default: null
-        },
-        reward: {
-            type: String,
-            trim: true,
-            default: null
         }
     },
-    adminNotes: {
-        type: Array,
-        default: null
+    notes:{
+        type: String,
+        default: ''
     }
 }, {
     toJSON: { virtuals: true },
