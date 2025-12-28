@@ -50,6 +50,13 @@ const sessionSchema = new mongoose.Schema({
         id: String,
         name: String
     },
+    perkTypes:{
+        type: [Object],
+        default: [],
+        id: String,
+        name: String,
+        color: String
+    },
     enemyTypes: {
         type: [Object],
         default: [],

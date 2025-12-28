@@ -45,12 +45,15 @@ export const createSession = async (request, response) => {
 
     const session_data = request.body
 
-    if (session_data.entityTypes) session_data.entityTypes.forEach(h => addId(h))
-    if (session_data.enemyTypes) session_data.enemyTypes.forEach(h => addId(h))
-    if (session_data.characteristicsList) session_data.characteristicsList.forEach(h => addId(h))
-    if (session_data.currencyTypes) session_data.currencyTypes.forEach(h => addId(h))
-    if (session_data.questTypes) session_data.questTypes.forEach(h => addId(h))
-
+    // if (session_data.entityTypes) session_data.entityTypes.forEach(h => addId(h))
+    // if (session_data.enemyTypes) session_data.enemyTypes.forEach(h => addId(h))
+    // if (session_data.characteristicsList) session_data.characteristicsList.forEach(h => addId(h))
+    // if (session_data.currencyTypes) session_data.currencyTypes.forEach(h => addId(h))
+    // if (session_data.questTypes) session_data.questTypes.forEach(h => addId(h))
+    const properties = ['entityTypes', 'enemyTypes', 'characteristicsList', 'currencyTypes', 'questTypes', 'perkTypes'];
+    properties.forEach(prop => {
+        session_data[prop]?.forEach(addId);
+    });
 
     const session = await Session.create(session_data)
     if (!session) {
@@ -64,11 +67,17 @@ export const updateSession = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
     const session_data = request.body
 
-    if (session_data.entityTypes) session_data.entityTypes.forEach(eT => addId(eT))
-    if (session_data.enemyTypes) session_data.enemyTypes.forEach(eT => addId(eT))
-    if (session_data.characteristicsList) session_data.characteristicsList.forEach(cL => addId(cL))
-    if (session_data.currencyTypes) session_data.currencyTypes.forEach(cT => addId(cT))
-    if (session_data.questTypes) session_data.questTypes.forEach(qT => addId(qT))
+    // if (session_data.entityTypes) session_data.entityTypes.forEach(eT => addId(eT))
+    // if (session_data.enemyTypes) session_data.enemyTypes.forEach(eT => addId(eT))
+    // if (session_data.characteristicsList) session_data.characteristicsList.forEach(cL => addId(cL))
+    // if (session_data.currencyTypes) session_data.currencyTypes.forEach(cT => addId(cT))
+    // if (session_data.questTypes) session_data.questTypes.forEach(qT => addId(qT))
+    // if (session_data.perkTypes) session_data.perkTypes.forEach(pT => addId(pT))
+
+    const properties = ['entityTypes', 'enemyTypes', 'characteristicsList', 'currencyTypes', 'questTypes', 'perkTypes'];
+    properties.forEach(prop => {
+        session_data[prop]?.forEach(addId);
+    });
 
     const session = await populateSession(
         Session.findByIdAndUpdate(objectId, session_data, { new: true, runValidators: true })
