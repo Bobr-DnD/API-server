@@ -11,13 +11,18 @@ const entitySchema = new mongoose.Schema({
         required: [true, 'Entity should have a type'],
         trim: true
     },
+    description: {
+        type: String,
+        required: [true, 'Entity should have a description'],
+        trim: true
+    },
     image: {
         type: String,
         default: null
     },
-    adminNotes: {
-        type: [String],
-        default: []
+    notes: {
+        type: String,
+        default: null
     },
     characteristics: {
         type: Object,
@@ -32,16 +37,7 @@ const entitySchema = new mongoose.Schema({
         ref: "Effect",
         default: []
     },
-    description: {
-        type: String,
-        default: null,
-        trim: true
-    },
     price: {
-        type: Number,
-        default: null
-    },
-    usage: {
         type: Number,
         default: null
     },
