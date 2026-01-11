@@ -1,9 +1,9 @@
 import Session from '../schemas/sessionSchema.js'
 import { toObjectId } from '../utils/ObjectIdConverter.js'
 import { populateSession } from '../utils/entityPopulator.js';
-import { transformId } from '../utils/IDConverter.js'
-import { sortArraysByOneField, sortByTwoFields } from '../utils/filtration.js';
-import { populateEffects, addId, updateCharacterSessionCharacteristic, updateCharacterSessionCurrency } from '../utils/characterHelper.js';
+import { transformArray } from '../utils/IDConverter.js'
+import { sortByTwoFields } from '../utils/filtration.js';
+import { addId, updateCharacterSessionCharacteristic, updateCharacterSessionCurrency } from '../utils/characterHelper.js';
 
 export const getSessions = async (request, response) => {
     const sessions = await Session.find();
@@ -22,21 +22,7 @@ export const getSessionById = async (request, response) => {
         return response.code(404).send({ error: `Session with ID ${objectId} not found` })
     }
 
-    session.characters.forEach(ch => {
-        return transformId(ch)
-    })
-
-    // session.effects.forEach(effect => {
-    //     return transformId(effect)
-    // })
-
-    sortByTwoFields(session.entities, 'type', 'name')
-    sortByTwoFields(session.perks, 'type', 'name')
-
-    session.characters.map(ch => {
-        sortByTwoFields(ch.perks, 'type', 'name')
-        sortByTwoFields(ch.entities, 'type', 'name')
-    })
+    SortAndTransform(session)
 
     return response.code(200).send(session)
 }
@@ -45,11 +31,6 @@ export const createSession = async (request, response) => {
 
     const session_data = request.body
 
-    // if (session_data.entityTypes) session_data.entityTypes.forEach(h => addId(h))
-    // if (session_data.enemyTypes) session_data.enemyTypes.forEach(h => addId(h))
-    // if (session_data.characteristicsList) session_data.characteristicsList.forEach(h => addId(h))
-    // if (session_data.currencyTypes) session_data.currencyTypes.forEach(h => addId(h))
-    // if (session_data.questTypes) session_data.questTypes.forEach(h => addId(h))
     const properties = ['entityTypes', 'enemyTypes', 'characteristicsList', 'currencyTypes', 'questTypes', 'perkTypes'];
     properties.forEach(prop => {
         session_data[prop]?.forEach(addId);
@@ -67,13 +48,6 @@ export const updateSession = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
     const session_data = request.body
 
-    // if (session_data.entityTypes) session_data.entityTypes.forEach(eT => addId(eT))
-    // if (session_data.enemyTypes) session_data.enemyTypes.forEach(eT => addId(eT))
-    // if (session_data.characteristicsList) session_data.characteristicsList.forEach(cL => addId(cL))
-    // if (session_data.currencyTypes) session_data.currencyTypes.forEach(cT => addId(cT))
-    // if (session_data.questTypes) session_data.questTypes.forEach(qT => addId(qT))
-    // if (session_data.perkTypes) session_data.perkTypes.forEach(pT => addId(pT))
-
     const properties = ['entityTypes', 'enemyTypes', 'characteristicsList', 'currencyTypes', 'questTypes', 'perkTypes'];
     properties.forEach(prop => {
         session_data[prop]?.forEach(addId);
@@ -86,23 +60,13 @@ export const updateSession = async (request, response) => {
     if (!session) {
         return response.code(404).send({ error: `Sesdion with ID ${objectId} not found` })
     }
-    console.log(session.characteristicsList);
 
     if (session.characters.length > 0) {
         await updateCharacterSessionCharacteristic(session.characters, session.characteristicsList)
         await updateCharacterSessionCurrency(session.characters, session.currencyTypes)
     }
 
-    session.characters.forEach(ch => {
-        return transformId(ch)
-    })
-
-    sortByTwoFields(session.entities, 'type', 'name')
-    sortByTwoFields(session.perks, 'type', 'name')
-
-    session.characters.map(ch => {
-        sortByTwoFields(ch.perks, 'type', 'name')
-    })
+    SortAndTransform(session)
 
     return response.code(200).send(session)
 }
@@ -140,4 +104,16 @@ export const removeItem = async (opts) => {
     const index = session[opts.field].findIndex(entity => String(entity) === opts.id)
     if (index !== -1) session[opts.field].splice(index, 1)
     session = await Session.findByIdAndUpdate(opts.sessionId, session, { new: true, runValidators: true })
+}
+
+function SortAndTransform(session) {
+    transformArray(session.characters)
+
+    sortByTwoFields(session.entities, 'type', 'name')
+    sortByTwoFields(session.perks, 'type', 'name')
+
+    session.characters.map(ch => {
+        sortByTwoFields(ch.perks, 'type', 'name')
+        sortByTwoFields(ch.entities, 'type', 'name')
+    })
 }

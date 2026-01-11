@@ -2,20 +2,6 @@ import { createId } from './IDConverter.js'
 import mongoose from 'mongoose';
 import Character from '../schemas/characterSchema.js'
 
-//INFO deprecated function, there is no such functionality now
-export function populateEffects(effects = [], effectsDuration = []) {
-    if (!Array.isArray(effects) || effects.length === 0) {
-        console.log('bad');
-
-        return []
-    }
-
-    effects.forEach((effect, index) => {
-        effect.timeLeft = effectsDuration[index]
-    })
-
-}
-
 export function addId(field) {
     if (field.id && mongoose.isValidObjectId(field.id)) return
     field.id = createId().toString()

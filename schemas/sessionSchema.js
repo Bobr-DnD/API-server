@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const sessionSchema = new mongoose.Schema({
     name: {
@@ -20,7 +20,7 @@ const sessionSchema = new mongoose.Schema({
         type: Object,
         default: {}
     },
-    adminNotes: {
+    notes: {
         type: String,
         default: null
     },
