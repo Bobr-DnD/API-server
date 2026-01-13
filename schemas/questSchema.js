@@ -6,27 +6,39 @@ const questSchema = new mongoose.Schema({
         required: [true, 'Quest should have a name'],
         trim: true
     },
-    reward: {
+    description:{
         type: String,
+        required: [true, 'Quest should have a descritpion'],
         trim: true
     },
     status: {
         type: String,
-        enum: ['done', 'active', 'hidden', 'fail'],
-        default: 'hidden'
+        required: [true, 'Quest should have a descritpion'],
+        trim: true
+    },
+    reward: {
+        type: String,
+        trim: true
     },
     steps: {
         type: [Object],
-        default: {
-            name: "quest name",
-            status: "hidden",
-            requirement: "2 Strength",
-            reward: "10 монет"
+        id:{
+            type: String
+        },
+        name: {
+            type: String,
+            trim: true,
+            default: null
+        },
+        status: {
+            type: String,
+            trim: true,
+            default: null
         }
     },
-    adminNotes:{
-        type: Array,
-        default: null
+    notes:{
+        type: String,
+        default: ''
     }
 }, {
     toJSON: { virtuals: true },

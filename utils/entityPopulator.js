@@ -1,47 +1,36 @@
-import Medicine from '../schemas/medicinesSchema.js'
-import Enemy from '../schemas/enemySchema.js'
 
 export function populateCharacter(query) {
     return query.populate([
-        'weapons',
-        'armor',
         'perks',
         'effects',
-        'medicines',
-        'inventory',
+        'entities',
         'quests',
-        { path: 'medicines', populate: ['effect', 'addictionEffect', 'recipe'] }
+        { path: 'entities', populate: ['effects'] }
     ]);
 }
 
 export function populateSession(query) {
     return query.populate([
         'characters',
-        'weapons',
-        'armors',
+        'entities',
         'enemies',
         'perks',
         'effects',
-        'medicines',
-        'inventories',
         'perks',
-        'fractions',
         'quests',
-        {path: 'characters', populate: ['weapons', 'armor', 'perks', 'medicines', 'inventory', 'quests']}
+        { path: 'characters', populate: ['entities', 'perks', 'quests', 'effects', { path: 'entities', populate: ['effects'] }] },
+        { path: 'entities', populate: ['effects'] },
     ])
 }
 
 export function populateEnemy(query) {
     return query.populate([
-        'weapons',
-        'armor'
+        'entities'
     ])
 }
 
-export function populateMedicine(query){
+export function populateEntity(query) {
     return query.populate([
-        'effect',
-        'addictionEffect',
-        'recipe'
+        'effects'
     ])
 }

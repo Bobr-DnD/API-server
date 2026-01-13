@@ -7,17 +7,24 @@ const enemySchema = new mongoose.Schema({
         unique: false,
         trim: true
     },
-    photo: {
+    image: {
         type: String,
-        required: [true, 'Enemy should have a photo'],
+        default: null,
         trim: true
     },
-    gender: { //make it enum later
+    gender: {
         type: String,
+        trim: true,
         default: null
     },
-    class: { //make it enum later
+    class: {
         type: String,
+        trim: true,
+        default: null
+    },
+    race: {
+        type: String,
+        tri: true,
         default: null
     },
     level: {
@@ -26,49 +33,32 @@ const enemySchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['mini-boss', 'boss', 'creepok'],
-        default: 'creepok'
+        trim: true,
+        default: null
     },
     health: {
         type: Number,
         default: 10
     },
-    resist: {
-        type: Number,
-        default: 0
-    },
-    damage: {
-        type: String,
-        default: null
-    },
-    actionPoints: {
-        type: Number,
-        default: 0
-    },
-    ability: {
-        type: String,
-        default: null
-    },
     characteristics: {
         type: Object,
-        default: {}
+        default: null
     },
     customFields: {
         type: Object,
-        default: {}
-    },
-    adminNotes:{
-        type: Array,
         default: null
     },
-    weapons: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Weapon',
-        default: null
+    abilities: {
+        type: [String],
+        default: []
     },
-    armor: {
+    entities: {
         type: [mongoose.Schema.ObjectId],
-        ref: 'Armor',
+        ref: 'Entity',
+        default: []
+    },
+    adminNotes: {
+        type: [String],
         default: []
     },
 },

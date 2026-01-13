@@ -7,6 +7,11 @@ const characterSchema = new mongoose.Schema({
         unique: false,
         trim: true
     },
+    session: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Session',
+        require: [true, 'Character should have a session']
+    },
     image: {
         type: String,
         trim: true,
@@ -14,14 +19,17 @@ const characterSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
+        trim: true,
         default: null
     },
     class: {
         type: String,
+        trim: true,
         default: null
     },
     race: {
         type: String,
+        trim: true,
         default: null
     },
     level: {
@@ -40,22 +48,6 @@ const characterSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    health: {
-        type: [Object],
-        default: []
-    },
-    characteristics: {
-        type: Object,
-        default: null
-    },
-    customFields: {
-        type: Object,
-        default: null
-    },
-    effects: {
-        type: [Object],
-        default: null
-    },
     adminNotes: {
         type: String,
         default: null
@@ -64,24 +56,32 @@ const characterSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    session: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Session',
-        require: [true, 'Character should have a session']
+    characteristics: {
+        type: Object,
+        default: null
     },
-    quests: { 
+    currency: {
+        type: [Object],
+        default: null
+    },
+    customFields: {
+        type: Object,
+        default: null
+    },
+    health: {
+        type: [Object],
+        default: [],
+    },
+    effects: {
+        type: [mongoose.Schema.ObjectId],
+        ref: 'Effect',
+        default: [],
+        effect: Object,
+        timeLeft: Number
+    },
+    quests: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Quest',
-        default: []
-    },
-    weapons: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Weapon',
-        default: []
-    },
-    armor: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Armor',
         default: []
     },
     perks: {
@@ -89,16 +89,11 @@ const characterSchema = new mongoose.Schema({
         ref: 'Perk',
         default: []
     },
-    medicines: {
+    entities: {
         type: [mongoose.Schema.ObjectId],
-        ref: 'Medicine',
+        ref: 'Entity',
         default: []
     },
-    inventory: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Inventory',
-        default: []
-    }
 },
     {
         toJSON: { virtuals: true },
