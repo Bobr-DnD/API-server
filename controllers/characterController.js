@@ -1,7 +1,7 @@
 import Character from '../schemas/characterSchema.js'
 import Session from '../schemas/sessionSchema.js'
 import { addItem, removeItem } from './sessionController.js'
-import { toObjectId } from '../utils/ObjectIdConverter.js'
+import { toObjectId } from '../utils/IDConverter.js'
 import { addId, toSessionCharacteristics, toSessionCurrency } from '../utils/characterHelper.js'
 import { populateCharacter } from '../utils/entityPopulator.js'
 import { sortByTwoFields } from '../utils/filtration.js'

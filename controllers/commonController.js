@@ -1,5 +1,5 @@
 import { transformArray, transformId } from '../utils/IDConverter.js'
-import { toObjectId } from '../utils/ObjectIdConverter.js'
+import { toObjectId } from '../utils/IDConverter.js'
 import { addItem } from './sessionController.js'
 import { addId } from '../utils/characterHelper.js'
 

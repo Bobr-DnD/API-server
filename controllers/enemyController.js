@@ -1,5 +1,5 @@
 import Enemy from '../schemas/enemySchema.js'
-import { toObjectId } from '../utils/ObjectIdConverter.js'
+import { toObjectId } from '../utils/IDConverter.js'
 import { populateEnemy } from '../utils/entityPopulator.js';
 import { addItem } from './sessionController.js';
 

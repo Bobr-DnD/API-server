@@ -1,5 +1,5 @@
 import Session from '../schemas/sessionSchema.js'
-import { toObjectId } from '../utils/ObjectIdConverter.js'
+import { toObjectId } from '../utils/IDConverter.js'
 import { populateSession } from '../utils/entityPopulator.js';
 import { transformArray } from '../utils/IDConverter.js'
 import { sortByTwoFields } from '../utils/filtration.js';
