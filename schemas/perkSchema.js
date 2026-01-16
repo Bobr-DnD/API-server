@@ -11,6 +11,12 @@ const perkSchema = new mongoose.Schema({
         required: [true, 'Perk should have a description'],
         trim: true
     },
+    type: {
+        type: Object,
+        required: [true, 'Perk should have a type'],
+        name: String,
+        color: String
+    },
     requirement: {
         type: Object,
         default: null
@@ -18,11 +24,6 @@ const perkSchema = new mongoose.Schema({
     ranks: {
         type: Number,
         default: 0
-    },
-    type: {
-        type: Object,
-        name: String,
-        color: String
     },
     notes: {
         type: String,

@@ -82,6 +82,24 @@ export const deleteSession = async (request, response) => {
     return response.code(200).send({ status: 'Success' })
 }
 
+export const login = async (request, response) => {
+    const objectId = toObjectId(request.params.id, response)
+    const { password } = request.body
+    const session = await Session.findById(objectId).select('+password')
+
+    if (!session) {
+        return response.code(404).send({ error: `Session with ID ${objectId} not found` })
+    }
+
+    const match = await session.comparePassword(password)
+
+    if (!match) {
+        return response.code(402).send({ success: false, error: 'Invalid credentials' })
+    }
+
+    return response.code(200).send({ success: true, message: 'Login successful' })
+}
+
 export const addItem = async (opts, response) => {
     let session = await Session.findById(opts.sessionId)
 
