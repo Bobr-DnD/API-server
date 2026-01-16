@@ -123,7 +123,8 @@ sessionSchema.pre('save', async function (next) {
 sessionSchema.pre('findOneAndUpdate', async function () {
     const update = this.getUpdate();
 
-    const password = update.password || update.$set.password
+    const password = update?.password || update.$set?.password
+    
     if (!password) {
         return;
     }
