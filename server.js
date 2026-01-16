@@ -54,7 +54,7 @@ fastify.register(filesRouter, { prefix: '/storage' })
 // Start server
 const start = async () => {
   try {
-    await fastify.listen({ port: process.env.API_PORT })
+    await fastify.listen({ port: process.env.API_PORT, host: '0.0.0.0' })
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
