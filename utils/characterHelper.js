@@ -14,7 +14,7 @@ export function generateId() {
 export function toSessionCharacteristics(characterField, sessionField) {
 
     const newStats = sessionField.reduce((stats, el) => {
-        stats[el.name] = characterField[el.name] ?? 0;
+        stats[el.name] = characterField?.[el.name] ?? 0;
         return stats;
     }, {});
 
