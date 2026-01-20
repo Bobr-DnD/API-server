@@ -29,7 +29,7 @@ const fastify = Fastify({
   disableRequestLogging: true
 })
 
-const corsOrigins = process.env.CORS_ORIGIN
+const corsOrigins = process.env.CORS_ORIGIN_API
   ?.split(',')
   .map(o => o.trim())
 
