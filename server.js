@@ -29,8 +29,15 @@ const fastify = Fastify({
   disableRequestLogging: true
 })
 
+const corsOrigins = process.env.CORS_ORIGIN
+  ?.split(',')
+  .map(o => o.trim())
+
+  console.log(corsOrigins);
+  
+
 await fastify.register(customLogger)
-await fastify.register(cors, { origin: ['http://127.0.0.1:3000', 'http://localhost:3000', 'http://localhost:8080', 'http://127.0.0.1:8080', '*'], credentials: true })
+await fastify.register(cors, { origin: corsOrigins, credentials: true })
 await fastify.register(db, { use_local: process.env.DB_LOCAL === 'true' })
 await fastify.register(mongoosePlugin, { use_local: process.env.DB_LOCAL === 'true' })
 await fastify.register(errorHandler)
@@ -44,7 +51,7 @@ fastify.register(charactersRoute, { prefix: '/character' })
 fastify.register(sessionRouter, { prefix: '/session' })
 fastify.register(enemyRouter, { prefix: '/enemy' })
 
-fastify.register(commonRouter, {prefix: '/entity', model: 'Entity', collection: 'entities'})
+fastify.register(commonRouter, { prefix: '/entity', model: 'Entity', collection: 'entities' })
 fastify.register(commonRouter, { prefix: '/effect', model: 'Effect', collection: 'effects' })
 fastify.register(commonRouter, { prefix: '/perk', model: 'Perk', collection: 'perks' })
 fastify.register(commonRouter, { prefix: '/quest', model: 'Quest', collection: 'quests' })
