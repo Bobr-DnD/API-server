@@ -2,7 +2,7 @@ import Character from '../schemas/characterSchema.js'
 import Session from '../schemas/sessionSchema.js'
 import { addItem, removeItem } from './sessionController.js'
 import { toObjectId } from '../utils/IDConverter.js'
-import { addId, toSessionCharacteristics, toSessionCurrency } from '../utils/characterHelper.js'
+import { addId, toSessionCharacteristics, toSessionCurrency, applyEffects } from '../utils/characterHelper.js'
 import { populateCharacter } from '../utils/entityPopulator.js'
 import { sortByTwoFields } from '../utils/filtration.js'
 
@@ -23,7 +23,8 @@ export const getCharacterById = async (request, response) => {
     }
 
     sortFields(character)
-
+    applyEffects(character)
+    
     return response.code(200).send(character)
 }
 
@@ -62,6 +63,7 @@ export const updateCharacter = async (request, response) => {
     }
 
     sortFields(character)
+    applyEffects(character)
 
     return response.code(200).send(character)
 }
