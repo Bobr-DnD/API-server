@@ -2,7 +2,7 @@ import Session from '../schemas/sessionSchema.js'
 import { toObjectId } from '../utils/IDConverter.js'
 import { populateSession } from '../utils/entityPopulator.js';
 import { transformArray } from '../utils/IDConverter.js'
-import { sortByTwoFields } from '../utils/filtration.js';
+import { sortByTwoFields, sortPerksByTwoFields } from '../utils/filtration.js';
 import { addId, updateCharacterSessionCharacteristic, updateCharacterSessionCurrency } from '../utils/characterHelper.js';
 
 export const getSessions = async (request, response) => {
@@ -128,10 +128,10 @@ function SortAndTransform(session) {
     transformArray(session.characters)
 
     sortByTwoFields(session.entities, 'type', 'name')
-    sortByTwoFields(session.perks, 'type', 'name')
+    sortPerksByTwoFields(session.perks, 'name', 'name')
 
     session.characters.map(ch => {
-        sortByTwoFields(ch.perks, 'type', 'name')
+        sortPerksByTwoFields(ch.perks, 'name', 'name')
         sortByTwoFields(ch.entities, 'type', 'name')
     })
 }

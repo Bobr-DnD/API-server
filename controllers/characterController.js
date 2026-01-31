@@ -4,7 +4,7 @@ import { addItem, removeItem } from './sessionController.js'
 import { toObjectId } from '../utils/IDConverter.js'
 import { addId, toSessionCharacteristics, toSessionCurrency, applyEffects } from '../utils/characterHelper.js'
 import { populateCharacter } from '../utils/entityPopulator.js'
-import { sortByTwoFields } from '../utils/filtration.js'
+import { sortByTwoFields, sortPerksByTwoFields } from '../utils/filtration.js'
 
 export const getCharacters = async (request, response) => {
     const characters = await Character.find();
@@ -81,6 +81,6 @@ export const deleteCharacter = async (request, response) => {
 }
 
 function sortFields(character){
-    sortByTwoFields(character.perks, 'type', 'name')
-    sortByTwoFields(character.entities, 'type', 'name')
+    sortPerksByTwoFields(character.perks, 'name', 'name')
+    sortByTwoFields(character.entities, 'type', 'name')    
 }
