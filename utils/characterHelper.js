@@ -1,6 +1,7 @@
 import { createId } from './IDConverter.js'
 import mongoose from 'mongoose';
 import Character from '../schemas/characterSchema.js'
+import { log } from 'console';
 
 export function addId(field) {
     if (field.id && mongoose.isValidObjectId(field.id)) return
@@ -68,8 +69,20 @@ export async function updateCharacterSessionCurrency(characters, sessionStats) {
 }
 
 export function applyEffects(character) {
-    character._characteristicsComputed = structuredClone(character.characteristics)
+    character._characteristicsComputed = Object.fromEntries(
+        Object.entries(character.characteristics).map(([key, value]) => {
+            if (!Number.isNaN(Number(value))) {
+                return [key, Number(value)]
+            }
+            return [key, value]
+        })
+    )
+
     character.effects.forEach(effect => {
-        Object.entries(effect.effect).map(([key, value]) => character._characteristicsComputed[key] += value)
+        Object.entries(effect.effect).map(([key, value]) => {
+            if(!Number.isNaN(Number(character._characteristicsComputed[key]))) character._characteristicsComputed[key] += value
+        
+        //TODO handle string characteristics fields
+        })
     });
 }

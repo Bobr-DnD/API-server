@@ -33,9 +33,6 @@ const corsOrigins = process.env.CORS_ORIGIN_API
   ?.split(',')
   .map(o => o.trim())
 
-  console.log(corsOrigins);
-  
-
 await fastify.register(customLogger)
 await fastify.register(cors, { origin: corsOrigins, credentials: true })
 await fastify.register(db, { use_local: process.env.DB_LOCAL === 'true' })
