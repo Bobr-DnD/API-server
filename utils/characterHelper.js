@@ -14,7 +14,7 @@ export function generateId() {
 export function toSessionCharacteristics(characterField, sessionField) {
 
     const newStats = sessionField.reduce((stats, el) => {
-        stats[el.name] = characterField?.[el.name] ?? 0;
+        stats[el.name] = characterField?.[el.name] ?? '0';
         return stats;
     }, {});
 
@@ -65,4 +65,11 @@ export async function updateCharacterSessionCurrency(characters, sessionStats) {
         );
     }
 
+}
+
+export function applyEffects(character) {
+    character._characteristicsComputed = structuredClone(character.characteristics)
+    character.effects.forEach(effect => {
+        Object.entries(effect.effect).map(([key, value]) => character._characteristicsComputed[key] += value)
+    });
 }
