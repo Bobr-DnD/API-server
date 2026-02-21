@@ -9,6 +9,23 @@ export function populateCharacter(query) {
     ]);
 }
 
+export function populateSessionCharacters(query){
+    return query.populate([
+        {
+            path: 'characters',
+            select: 'name image level experience experienceToLevelUp health'
+        }
+    ])
+}
+
+export function populateSessionEntitiesAndPerks(query){
+    return query.populate([
+        'entities',
+        'perks',
+        { path: 'entities', populate: ['effects'] },
+    ])
+}
+
 export function populateSession(query) {
     return query.populate([
         'characters',

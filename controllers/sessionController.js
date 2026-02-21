@@ -1,12 +1,17 @@
 import Session from '../schemas/sessionSchema.js'
 import { toObjectId } from '../utils/IDConverter.js'
-import { populateSession } from '../utils/entityPopulator.js';
+import { populateSession, populateSessionCharacters, populateSessionEntitiesAndPerks } from '../utils/entityPopulator.js';
 import { transformArray } from '../utils/IDConverter.js'
 import { sortByTwoFields, sortPerksByTwoFields } from '../utils/filtration.js';
 import { addId, updateCharacterSessionCharacteristic, updateCharacterSessionCurrency } from '../utils/characterHelper.js';
 
 export const getSessions = async (request, response) => {
     const sessions = await Session.find();
+    return response.code(200).send(sessions)
+}
+
+export const getSessionNamesAndImages = async (request, response) => {
+    const sessions = await Session.find().select('name image');
     return response.code(200).send(sessions)
 }
 
@@ -23,6 +28,37 @@ export const getSessionById = async (request, response) => {
     }
 
     SortAndTransform(session)
+
+    return response.code(200).send(session)
+}
+
+export const getPlainSessionWithPlainCharacters = async (request, response) => {
+
+    const objectId = toObjectId(request.params.id, response)
+
+    const session = await populateSessionCharacters(
+        Session.findById(objectId).select('characters')
+    ).exec();
+
+    if (!session) {
+        return response.code(404).send({ error: `Session with ID ${objectId} not found` })
+    }
+
+    transformArray(session.characters)
+
+    return response.code(200).send(session)
+}
+
+export const getPlainSessionWithEntitiesAndEffects = async(request, response) => {
+    const objectId = toObjectId(request.params.id, response)
+
+    const session = await populateSessionEntitiesAndPerks(
+        Session.findById(objectId).select('entities perks entityTypes')
+    ).exec();
+
+    if (!session) {
+        return response.code(404).send({ error: `Session with ID ${objectId} not found` })
+    }
 
     return response.code(200).send(session)
 }
