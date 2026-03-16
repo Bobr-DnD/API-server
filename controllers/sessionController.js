@@ -1,7 +1,6 @@
 import Session from '../schemas/sessionSchema.js'
 import { toObjectId } from '../utils/IDConverter.js'
 import { populateSession, populateSessionCharacters, populateSessionEntitiesAndPerks } from '../utils/entityPopulator.js';
-import { transformArray } from '../utils/IDConverter.js'
 import { sortByTwoFields, sortPerksByTwoFields } from '../utils/filtration.js';
 import { addId, updateCharacterSessionCharacteristic, updateCharacterSessionCurrency } from '../utils/characterHelper.js';
 
@@ -44,8 +43,6 @@ export const getPlainSessionWithPlainCharacters = async (request, response) => {
         return response.code(404).send({ error: `Session with ID ${objectId} not found` })
     }
 
-    transformArray(session.characters)
-
     return response.code(200).send(session)
 }
 
@@ -67,11 +64,6 @@ export const createSession = async (request, response) => {
 
     const session_data = request.body
 
-    const properties = ['entityTypes', 'enemyTypes', 'characteristicsList', 'currencyTypes', 'questTypes', 'perkTypes'];
-    properties.forEach(prop => {
-        session_data[prop]?.forEach(addId);
-    });
-
     const session = await Session.create(session_data)
     if (!session) {
         return response.code(404).send({ error: 'Can`t create session' })
@@ -83,11 +75,6 @@ export const updateSession = async (request, response) => {
 
     const objectId = toObjectId(request.params.id, response)
     const session_data = request.body
-
-    const properties = ['entityTypes', 'enemyTypes', 'characteristicsList', 'currencyTypes', 'questTypes', 'perkTypes'];
-    properties.forEach(prop => {
-        session_data[prop]?.forEach(addId);
-    });
 
     const session = await populateSession(
         Session.findByIdAndUpdate(objectId, session_data, { new: true, runValidators: true })
@@ -161,7 +148,6 @@ export const removeItem = async (opts) => {
 }
 
 function SortAndTransform(session) {
-    transformArray(session.characters)
 
     sortByTwoFields(session.entities, 'type', 'name')
     sortPerksByTwoFields(session.perks, 'name', 'name')

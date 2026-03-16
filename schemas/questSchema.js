@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import questStep from '../schemasTypes/questStep.schema.js'
 
 const questSchema = new mongoose.Schema({
     name: {
@@ -13,7 +14,7 @@ const questSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        required: [true, 'Quest should have a descritpion'],
+        required: [true, 'Quest should have a status'],
         trim: true
     },
     reward: {
@@ -21,24 +22,11 @@ const questSchema = new mongoose.Schema({
         trim: true
     },
     steps: {
-        type: [Object],
-        id:{
-            type: String
-        },
-        name: {
-            type: String,
-            trim: true,
-            default: null
-        },
-        status: {
-            type: String,
-            trim: true,
-            default: null
-        }
+        type: [questStep],
     },
     notes:{
         type: String,
-        default: ''
+        default: null
     }
 }, {
     toJSON: { virtuals: true },
