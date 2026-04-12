@@ -1,10 +1,13 @@
 import mongoose from 'mongoose'
+import loadoutLimitsSchema from '../schemasTypes/loadoutLimits.schema.js';
+import loadoutsSchema from '../schemasTypes/loadouts.schema.js';
+import healthSchema from '../schemasTypes/health.schema.js';
+import currencySchema from '../schemasTypes/currency.schema.js';
 
 const characterSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Character should have a name'],
-        unique: false,
         trim: true
     },
     session: {
@@ -61,7 +64,7 @@ const characterSchema = new mongoose.Schema({
         default: null
     },
     currency: {
-        type: [Object],
+        type: [currencySchema],
         default: null
     },
     customFields: {
@@ -69,15 +72,13 @@ const characterSchema = new mongoose.Schema({
         default: null
     },
     health: {
-        type: [Object],
+        type: [healthSchema],
         default: [],
     },
     effects: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Effect',
-        default: [],
-        effect: Object,
-        timeLeft: Number
+        default: []
     },
     quests: {
         type: [mongoose.Schema.ObjectId],
@@ -94,6 +95,14 @@ const characterSchema = new mongoose.Schema({
         ref: 'Entity',
         default: []
     },
+    loadouts: {
+        type: [loadoutsSchema],
+        default: []
+    },
+    loadoutsLimit: {
+        type: loadoutLimitsSchema,
+        default: () => ({})
+    }
 },
     {
         toJSON: { virtuals: true },
@@ -102,6 +111,10 @@ const characterSchema = new mongoose.Schema({
 
 characterSchema.virtual('characteristicsComputed').get(function () {
     return this._characteristicsComputed
+})
+
+characterSchema.virtual('id').get(function () {
+    return this._id.toString()
 })
 
 export default mongoose.model('Character', characterSchema)

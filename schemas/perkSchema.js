@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import perkTypeSchema from "../schemasTypes/perkType.schema.js"
 
 const perkSchema = new mongoose.Schema({
     name: {
@@ -6,16 +7,19 @@ const perkSchema = new mongoose.Schema({
         required: [true, 'Perk should have a name'],
         trim: true
     },
-    descriptions: {
-        type: [String],
+    descritpion:{
+        type: String,
         required: [true, 'Perk should have a description'],
         trim: true
     },
+    levels: {
+        type: [String],
+        trim: true,
+        default: []
+    },
     type: {
-        type: Object,
-        required: [true, 'Perk should have a type'],
-        name: String,
-        color: String
+        type: perkTypeSchema,
+        required: [true, 'Perk should have a type']
     },
     requirement: {
         type: Object,

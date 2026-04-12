@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
+import iconType from "../schemasTypes/typeWithIcon.schema.js";
+import colorType from "../schemasTypes/typeWithColor.schema.js"
+import nameType from "../schemasTypes/TypeWithName.schema.js"
 
 const sessionSchema = new mongoose.Schema({
     name: {
@@ -18,11 +21,6 @@ const sessionSchema = new mongoose.Schema({
         select: false,
         required: [true, 'Session should have a password']
     },
-    //TODO probably move is not important field
-    // move: {
-    //     type: Number,
-    //     default: 0
-    // },
     customFields: {
         type: Object,
         default: {}
@@ -32,44 +30,28 @@ const sessionSchema = new mongoose.Schema({
         default: null
     },
     entityTypes: {
-        type: [Object],
+        type: [iconType],
         default: [],
-        id: String,
-        icon: String,
-        name: String
     },
     currencyTypes: {
-        type: [Object],
-        default: [],
-        id: String,
-        name: String,
-        icon: String
+        type: [iconType],
+        default: []
     },
     characteristicsList: {
-        type: [Object],
-        default: [],
-        id: String,
-        name: String
+        type: [nameType],
+        default: []
     },
     questTypes: {
-        type: [Object],
-        default: [],
-        id: String,
-        name: String
+        type: [nameType],
+        default: []
     },
     perkTypes: {
-        type: [Object],
+        type: [colorType],
         default: [],
-        id: String,
-        name: String,
-        color: String
     },
     enemyTypes: {
-        type: [Object],
+        type: [iconType],
         default: [],
-        id: String,
-        name: String,
-        icon: String
     },
     characters: {
         type: [mongoose.Schema.ObjectId],
