@@ -19,8 +19,13 @@ const loadoutsLimitSchema = new mongoose.Schema(
         }
     },
     {
-        _id: false
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true }
     }
 )
+
+loadoutsLimitSchema.virtual('id').get(function () {
+    return this._id.toString()
+})
 
 export default loadoutsLimitSchema

@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import iconType from "../schemasTypes/typeWithIcon.schema.js";
 import colorType from "../schemasTypes/typeWithColor.schema.js"
 import nameType from "../schemasTypes/TypeWithName.schema.js"
+import customField from "../schemasTypes/customField.schema.js";
 
 const sessionSchema = new mongoose.Schema({
     name: {
@@ -22,8 +23,8 @@ const sessionSchema = new mongoose.Schema({
         required: [true, 'Session should have a password']
     },
     customFields: {
-        type: Object,
-        default: {}
+        type: [customField],
+        default: []
     },
     notes: {
         type: String,
