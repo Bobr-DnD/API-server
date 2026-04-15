@@ -46,7 +46,7 @@ export const getPlainSessionWithPlainCharacters = async (request, response) => {
     return response.code(200).send(session)
 }
 
-export const getPlainSessionWithEntitiesAndEffects = async(request, response) => {
+export const getPlainSessionWithEntitiesAndEffects = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
 
     const session = await populateSessionEntitiesAndPerks(
@@ -121,6 +121,34 @@ export const login = async (request, response) => {
     }
 
     return response.code(200).send({ success: true, message: 'Login successful' })
+}
+
+export const changePassword = async (request, response) => {
+    const objectId = toObjectId(request.params.id, response)
+    const { password, passwordNew } = request.body
+
+    console.log(`${password}    ${passwordNew}`);
+    
+    const session = await Session.findById(objectId).select('+password')
+
+    if (!session) {
+        return response.code(404).send({ error: `Session with ID ${objectId} not found` })
+    }
+
+    const match = await session.comparePassword(password)
+
+    if (!match) {
+        return response.code(402).send({ success: false, error: 'Password wrong' })
+    }
+
+    session.password = passwordNew
+
+    console.log(session.password);
+    
+
+    await Session.findByIdAndUpdate(objectId, session,{ new: true, runValidators: true })
+
+    return response.code(200).send({ success: true, message: 'Password changed' })
 }
 
 export const addItem = async (opts, response) => {
