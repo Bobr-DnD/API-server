@@ -7,7 +7,7 @@ const perkSchema = new mongoose.Schema({
         required: [true, 'Perk should have a name'],
         trim: true
     },
-    descritpion:{
+    description:{
         type: String,
         required: [true, 'Perk should have a description'],
         trim: true

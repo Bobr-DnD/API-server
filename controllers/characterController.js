@@ -35,7 +35,7 @@ export const createCharacter = async (request, response) => {
 
     if (character_data.health) character_data.health.forEach(h => addId(h))
 
-    character_data.characteristics = toSessionCharacteristics(character_data.characteristics ?? {}, session.characteristicsList)
+    character_data.characteristics = toSessionCharacteristics(character_data.characteristics ?? [], session.characteristicsList)
     character_data.currency = toSessionCurrency(character_data.currency ?? [], session.currencyTypes)
 
     const character = await Character.create(character_data)

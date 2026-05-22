@@ -1,16 +1,8 @@
 import mongoose from "mongoose";
 
-const customFieldSchema = new mongoose.Schema(
+const characteristics = new mongoose.Schema(
     {
-        name: {
-            type: String,
-            required: true,
-            trim: true
-        },
-        description: {
-            type: String,
-            trim: true
-        },
+        name: String,
         value: {
             type: mongoose.Schema.Types.Mixed,
             validate: {
@@ -21,17 +13,15 @@ const customFieldSchema = new mongoose.Schema(
 
             }
         },
-        required: true
     },
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true }
-
     }
 )
 
-customFieldSchema.virtual('id').get(function () {
+characteristics.virtual('id').get(function () {
     return this._id.toString()
 })
 
-export default customFieldSchema
+export default characteristics

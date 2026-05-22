@@ -3,6 +3,8 @@ import loadoutLimitsSchema from '../schemasTypes/loadoutLimits.schema.js';
 import loadoutsSchema from '../schemasTypes/loadouts.schema.js';
 import healthSchema from '../schemasTypes/health.schema.js';
 import currencySchema from '../schemasTypes/currency.schema.js';
+import customField from '../schemasTypes/customField.schema.js'
+import characteristics from '../schemasTypes/characteristics.schema.js';
 
 const characterSchema = new mongoose.Schema({
     name: {
@@ -60,7 +62,7 @@ const characterSchema = new mongoose.Schema({
         default: null
     },
     characteristics: {
-        type: Object,
+        type: [characteristics],
         default: null
     },
     currency: {
@@ -68,7 +70,7 @@ const characterSchema = new mongoose.Schema({
         default: null
     },
     customFields: {
-        type: Object,
+        type: [customField],
         default: null
     },
     health: {

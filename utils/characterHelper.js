@@ -14,10 +14,13 @@ export function generateId() {
 
 export function toSessionCharacteristics(characterField, sessionField) {
 
-    const newStats = sessionField.reduce((stats, el) => {
-        stats[el.name] = characterField?.[el.name] ?? '0';
-        return stats;
-    }, {});
+    const newStats = sessionField.map((el, index) =>
+    ({
+        'name': characterField[index].name ?? el.name,
+        'value': characterField[index].value ?? 0,
+        'id': characterField[index].id ?? createId()
+    })
+    )
 
     return newStats;
 }
@@ -80,9 +83,9 @@ export function applyEffects(character) {
 
     character.effects.forEach(effect => {
         Object.entries(effect.effect).map(([key, value]) => {
-            if(!Number.isNaN(Number(character._characteristicsComputed[key]))) character._characteristicsComputed[key] += value
-        
-        //TODO handle string characteristics fields
+            if (!Number.isNaN(Number(character._characteristicsComputed[key]))) character._characteristicsComputed[key] += value
+
+            //TODO handle string characteristics fields
         })
     });
 }
