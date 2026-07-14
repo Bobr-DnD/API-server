@@ -13,7 +13,7 @@ const perkSchema = new mongoose.Schema({
         trim: true
     },
     levels: {
-        type: [String],
+        type: [],
         trim: true,
         default: []
     },

@@ -82,11 +82,6 @@ const characterSchema = new mongoose.Schema({
         ref: 'Effect',
         default: []
     },
-    quests: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Quest',
-        default: []
-    },
     perks: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Perk',

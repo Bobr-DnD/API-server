@@ -126,8 +126,6 @@ export const login = async (request, response) => {
 export const changePassword = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
     const { password, passwordNew } = request.body
-
-    console.log(`${password}    ${passwordNew}`);
     
     const session = await Session.findById(objectId).select('+password')
 
@@ -138,13 +136,10 @@ export const changePassword = async (request, response) => {
     const match = await session.comparePassword(password)
 
     if (!match) {
-        return response.code(402).send({ success: false, error: 'Password wrong' })
+        return response.code(400).send({ success: false, error: 'Password wrong' })
     }
 
     session.password = passwordNew
-
-    console.log(session.password);
-    
 
     await Session.findByIdAndUpdate(objectId, session,{ new: true, runValidators: true })
 

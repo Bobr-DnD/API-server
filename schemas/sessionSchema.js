@@ -42,16 +42,8 @@ const sessionSchema = new mongoose.Schema({
         type: [nameType],
         default: []
     },
-    questTypes: {
-        type: [nameType],
-        default: []
-    },
     perkTypes: {
         type: [colorType],
-        default: [],
-    },
-    enemyTypes: {
-        type: [iconType],
         default: [],
     },
     characters: {
@@ -64,11 +56,6 @@ const sessionSchema = new mongoose.Schema({
         ref: 'Entity',
         default: []
     },
-    enemies: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Enemy',
-        default: []
-    },
     perks: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Perk',
@@ -77,11 +64,6 @@ const sessionSchema = new mongoose.Schema({
     effects: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Effect',
-        default: []
-    },
-    quests: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Quest',
         default: []
     }
 }, {

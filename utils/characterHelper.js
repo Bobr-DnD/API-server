@@ -16,9 +16,9 @@ export function toSessionCharacteristics(characterField, sessionField) {
 
     const newStats = sessionField.map((el, index) =>
     ({
-        'name': characterField[index].name ?? el.name,
-        'value': characterField[index].value ?? 0,
-        'id': characterField[index].id ?? createId()
+        name: characterField[index]?.name ?? el.name,
+        value: characterField[index]?.value ?? 0,
+        id: characterField[index]?.id ?? createId()
     })
     )
 
@@ -38,7 +38,7 @@ export function toSessionCurrency(characterField, sessionField) {
 export async function updateCharacterSessionCharacteristic(characters, sessionStats) {
 
     for (const character of characters) {
-
+        
         character.characteristics = toSessionCharacteristics(
             character.characteristics,
             sessionStats

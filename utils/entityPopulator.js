@@ -4,7 +4,6 @@ export function populateCharacter(query) {
         'perks',
         'effects',
         'entities',
-        'quests',
         { path: 'entities', populate: ['effects'] }
     ]);
 }
@@ -30,19 +29,11 @@ export function populateSession(query) {
     return query.populate([
         'characters',
         'entities',
-        'enemies',
         'perks',
         'effects',
         'perks',
-        'quests',
-        { path: 'characters', populate: ['entities', 'perks', 'quests', 'effects', { path: 'entities', populate: ['effects'] }] },
+        { path: 'characters', populate: ['entities', 'perks', 'effects', { path: 'entities', populate: ['effects'] }] },
         { path: 'entities', populate: ['effects'] },
-    ])
-}
-
-export function populateEnemy(query) {
-    return query.populate([
-        'entities'
     ])
 }
 
