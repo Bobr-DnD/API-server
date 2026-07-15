@@ -51,6 +51,9 @@ fastify.register(commonRouter, { prefix: '/effect', model: 'Effect', collection:
 fastify.register(commonRouter, { prefix: '/perk', model: 'Perk', collection: 'perks' })
 fastify.register(filesRouter, { prefix: '/storage' })
 
+fastify.get('/health', async (request, response) => {
+        return response.code(200).send({ message: 'API server is running' });
+    });
 
 // Start server
 const start = async () => {

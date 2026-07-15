@@ -106,10 +106,6 @@ const characterSchema = new mongoose.Schema({
         toObject: { virtuals: true }
     });
 
-characterSchema.virtual('characteristicsComputed').get(function () {
-    return this._characteristicsComputed
-})
-
 characterSchema.virtual('id').get(function () {
     return this._id.toString()
 })
