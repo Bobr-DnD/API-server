@@ -7,7 +7,11 @@ import {
     parseNameList,
     resolveNames,
     toNameList,
-    idsToNames,
+    parseNameIdEntry,
+    parseNameIdList,
+    resolveNameIdEntries,
+    toNameIdArray,
+    toNameIdList,
     stringifyMaybe,
 } from './helpers.js'
 
@@ -59,6 +63,13 @@ export const TYPE_FIELDS = {
             description: requiredString(row.description, 'description', errors),
             effect: parseJSON(row.effect, 'effect', errors, null),
         }),
+        template: [
+            {
+                name: 'Poison',
+                description: 'Deals poison damage over time',
+                effect: '{"damage": 10, "duration": 3, "type": "poison"}',
+            },
+        ],
     },
 
     entities: {
@@ -68,7 +79,6 @@ export const TYPE_FIELDS = {
             name: doc.name,
             type: ctx.entityTypeNameById.get(doc.type) ?? doc.type,
             description: doc.description ?? '',
-            image: doc.image ?? '',
             notes: doc.notes ?? '',
             characteristics: stringifyMaybe(doc.characteristics),
             requirement: stringifyMaybe(doc.requirement),
@@ -88,6 +98,19 @@ export const TYPE_FIELDS = {
             price: optionalNumber(row.price, 'price', errors, null),
             rarity: optionalString(row.rarity),
         }),
+        template: [
+            {
+                name: 'Iron Sword',
+                description: 'A sturdy blade favored by new adventurers',
+                type: 'Weapon',
+                notes: 'Starter weapon',
+                characteristics: '{"strength": 5, "durability": 20}',
+                requirement: '{"level": 1}',
+                effects: 'Poison effect (should exist)',
+                price: 100,
+                rarity: 'Common',
+            },
+        ],
     },
 
     perks: {
@@ -104,13 +127,23 @@ export const TYPE_FIELDS = {
         }),
         fromRow: (row, ctx, errors) => ({
             name: requiredString(row.name, 'name', errors),
-            description: requiredString(row.description, 'description', errors),
+            description: optionalString(row.description),
             type: validatePerkType(row.type, ctx, errors),
             levels: parseJSON(row.levels, 'levels', errors, []),
             requirement: parseJSON(row.requirement, 'requirement', errors, null),
             ranks: optionalNumber(row.ranks, 'ranks', errors, 0),
             notes: optionalString(row.notes),
         }),
+        template: [
+            {
+                name: 'Quick Reflexes',
+                description: 'Increases reaction speed in combat',
+                levels: '[{"name":"Desc for level1"},{"bonus":"Desc for level2"}]',
+                requirement: '{"level": 3}',
+                ranks: 2,
+                notes: 'Stacks with agility-based perks',
+            },
+        ],
     },
 
     characters: {
@@ -152,17 +185,17 @@ export const TYPE_FIELDS = {
                 ? JSON.stringify(doc.customFields.map(({ name, description, value }) => ({ name, description, value })))
                 : ''
             row.health = doc.health?.length ? JSON.stringify(doc.health) : ''
-            row.effects = toNameList(doc.effects, ctx.effectsById)
-            row.perks = toNameList(doc.perks, ctx.perksById)
-            row.entities = toNameList(doc.entities, ctx.entitiesById)
-            row.loadouts = doc.loadouts?.length
-                ? JSON.stringify(doc.loadouts.map(l => ({
-                    name: l.name,
-                    items: idsToNames(l.itemsIds, ctx.entitiesById),
-                    perks: idsToNames(l.perksIds, ctx.perksById),
-                })))
-                : ''
-            row.loadoutsLimit = stringifyMaybe(doc.loadoutsLimit)
+            row.effects = toNameIdList(doc.effects, ctx.effectsById)
+            row.perks = toNameIdList(doc.perks, ctx.perksById)
+            row.entities = toNameIdList(doc.entities, ctx.entitiesById)
+            // row.loadouts = doc.loadouts?.length
+            //     ? JSON.stringify(doc.loadouts.map(l => ({
+            //         name: l.name,
+            //         items: toNameIdArray(l.itemsIds, ctx.entitiesById),
+            //         perks: toNameIdArray(l.perksIds, ctx.perksById),
+            //     })))
+            //     : ''
+            // row.loadoutsLimit = stringifyMaybe(doc.loadoutsLimit)
 
             return row
         },
@@ -194,15 +227,37 @@ export const TYPE_FIELDS = {
             }),
             customFields: parseJSON(row.customFields, 'customFields', errors, []),
             health: parseJSON(row.health, 'health', errors, []),
-            effects: resolveNames(parseNameList(row.effects), ctx.effectsByName, 'effect', errors),
-            perks: resolveNames(parseNameList(row.perks), ctx.perksByName, 'perk', errors),
-            entities: resolveNames(parseNameList(row.entities), ctx.entitiesByName, 'entity', errors),
-            loadouts: parseJSON(row.loadouts, 'loadouts', errors, []).map((l, i) => ({
-                name: requiredString(l.name, `loadouts[${i}].name`, errors),
-                itemsIds: resolveNames(l.items ?? [], ctx.entitiesByName, `loadouts[${i}].items`, errors),
-                perksIds: resolveNames(l.perks ?? [], ctx.perksByName, `loadouts[${i}].perks`, errors),
-            })),
-            loadoutsLimit: parseJSON(row.loadoutsLimit, 'loadoutsLimit', errors, {}),
+            effects: resolveNameIdEntries(parseNameIdList(row.effects), ctx.effectsById, ctx.effectsByName, 'effect', errors),
+            perks: resolveNameIdEntries(parseNameIdList(row.perks), ctx.perksById, ctx.perksByName, 'perk', errors),
+            entities: resolveNameIdEntries(parseNameIdList(row.entities), ctx.entitiesById, ctx.entitiesByName, 'entity', errors),
+            // loadouts: parseJSON(row.loadouts, 'loadouts', errors, []).map((l, i) => ({
+            //     name: requiredString(l.name, `loadouts[${i}].name`, errors),
+            //     itemsIds: resolveNameIdEntries((l.items ?? []).map(parseNameIdEntry), ctx.entitiesById, ctx.entitiesByName, `loadouts[${i}].items`, errors),
+            //     perksIds: resolveNameIdEntries((l.perks ?? []).map(parseNameIdEntry), ctx.perksById, ctx.perksByName, `loadouts[${i}].perks`, errors),
+            // })),
+            // loadoutsLimit: parseJSON(row.loadoutsLimit, 'loadoutsLimit', errors, {}),
         }),
+        template: [
+            {
+                name: 'Aria Stormwind',
+                image: '',
+                gender: 'Female',
+                class: 'Ranger',
+                race: 'Elf',
+                level: 1,
+                experience: 0,
+                experienceToLevelUp: 10,
+                perkPoints: 0,
+                adminNotes: 'Created from the import template',
+                playerNotes: '',
+                customFields: '[{"name":"Backstory","description":"Character history","value":"Grew up in the northern forests"}]',
+                health: '[{"name":"HP","min":0,"max":10,"value":10}]',
+                effects: 'Fireball, Frost Shield',
+                perks: 'Quick Reflexes',
+                entities: 'Iron Sword',
+                // loadouts: '[{"name":"Main Loadout","items":["Iron Sword"],"perks":["Quick Reflexes"]}]',
+                // loadoutsLimit: '{"loadouts": 2, "items": 10, "perks": 5}',
+            },
+        ],
     },
 }

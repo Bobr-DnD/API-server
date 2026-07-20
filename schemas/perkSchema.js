@@ -9,8 +9,8 @@ const perkSchema = new mongoose.Schema({
     },
     description:{
         type: String,
-        required: [true, 'Perk should have a description'],
-        trim: true
+        trim: true,
+        default: ''
     },
     levels: {
         type: [],

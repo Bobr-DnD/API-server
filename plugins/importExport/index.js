@@ -21,6 +21,24 @@ const CONTENT_TYPES = {
 
 export default async function importExportPlugin(fastify) {
 
+    fastify.get('/:type/template', async (request, reply) => {
+        const { type } = request.params
+        const fields = TYPE_FIELDS[type]
+
+        if (!fields) {
+            return reply.code(400).send({ error: `Unknown type: ${type}` })
+        }
+
+        const format = detectFormat(null, request.query.format)
+        const headers = Object.keys(fields.template[0])
+        const buffer = buildSpreadsheet(fields.template, headers, format)
+
+        return reply
+            .header('Content-Disposition', `attachment; filename="${type}-template.${format}"`)
+            .header('Content-Type', CONTENT_TYPES[format])
+            .send(buffer)
+    })
+
     fastify.get('/:sessionId/:type/export', async (request, reply) => {
         const { sessionId, type } = request.params
         const model = TYPE_MODELS[type]
@@ -76,7 +94,8 @@ export default async function importExportPlugin(fastify) {
         }
 
         const ctx = await buildContext(session)
-        const existingIds = new Set(session[type].map(String))
+        const existingDocs = await model.find({ _id: { $in: session[type] } }).select('_id')
+        const existingIds = new Set(existingDocs.map(doc => doc.id))
 
         const parsed = rows.map((row, index) => {
             const errors = []
@@ -101,10 +120,15 @@ export default async function importExportPlugin(fastify) {
         let created = 0
         let updated = 0
         const newIds = []
+        const failedRows = []
 
         for (const row of parsed) {
             if (row.id) {
-                await model.findByIdAndUpdate(row.id, row.payload, { new: true, runValidators: true })
+                const doc = await model.findByIdAndUpdate(row.id, row.payload, { new: true, runValidators: true })
+                if (!doc) {
+                    failedRows.push({ row: row.index + 2, errors: [`id "${row.id}" no longer exists`] })
+                    continue
+                }
                 updated++
                 continue
             }
@@ -118,6 +142,10 @@ export default async function importExportPlugin(fastify) {
 
         if (newIds.length > 0) {
             await Session.findByIdAndUpdate(sessionId, { $push: { [type]: { $each: newIds } } })
+        }
+
+        if (failedRows.length > 0) {
+            return reply.code(400).send({ error: 'Update failed', details: failedRows, created, updated })
         }
 
         return reply.code(200).send({ success: true, created, updated, total: parsed.length })
