@@ -1,5 +1,5 @@
 import Session from '../schemas/sessionSchema.js'
-import { toObjectId } from '../utils/IDConverter.js'
+import { toObjectId, preserveSubdocIds } from '../utils/IDConverter.js'
 import { populateSession, populateSessionCharacters, populateSessionEntitiesAndPerks } from '../utils/entityPopulator.js';
 import { sortByTwoFields, sortPerksByTwoFields } from '../utils/filtration.js';
 import { addId, updateCharacterSessionCharacteristic, updateCharacterSessionCurrency } from '../utils/characterHelper.js';
@@ -71,10 +71,23 @@ export const createSession = async (request, response) => {
     return response.code(201).send(session)
 }
 
+const SUBDOC_ARRAY_FIELDS = ['entityTypes', 'currencyTypes', 'characteristicsList', 'perkTypes', 'customFields']
+
 export const updateSession = async (request, response) => {
 
     const objectId = toObjectId(request.params.id, response)
     const session_data = request.body
+
+    const existingSession = await Session.findById(objectId)
+    if (!existingSession) {
+        return response.code(404).send({ error: `Session with ID ${objectId} not found` })
+    }
+
+    for (const field of SUBDOC_ARRAY_FIELDS) {
+        if (session_data[field]) {
+            session_data[field] = preserveSubdocIds(existingSession[field], session_data[field])
+        }
+    }
 
     const session = await populateSession(
         Session.findByIdAndUpdate(objectId, session_data, { new: true, runValidators: true })

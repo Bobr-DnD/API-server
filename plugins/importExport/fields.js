@@ -77,7 +77,7 @@ export const TYPE_FIELDS = {
         toRow: (doc, ctx) => ({
             id: doc.id,
             name: doc.name,
-            type: ctx.entityTypeNameById.get(doc.type) ?? doc.type,
+            type: ctx.entityTypeNameById.get(doc.type) ?? `Unknown type (id: ${doc.type})`,
             description: doc.description ?? '',
             notes: doc.notes ?? '',
             characteristics: stringifyMaybe(doc.characteristics),

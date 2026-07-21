@@ -23,3 +23,18 @@ export function toObjectId(id, response) {
         return null
     }
 }
+
+export function preserveSubdocIds(existingArray = [], incomingArray) {
+    if (!Array.isArray(incomingArray)) return incomingArray
+
+    const existingById = new Map(existingArray.map(item => [item.id, item]))
+
+    return incomingArray.map(item => {
+        const matchId = item?._id ?? item?.id
+        const existing = matchId && existingById.get(String(matchId))
+        if (!existing) return item
+
+        const { id, ...rest } = item
+        return { ...rest, _id: existing._id }
+    })
+}
