@@ -11,7 +11,15 @@ const perkTypeSchema = new mongoose.Schema(
             trim: true
         }
     },
-    { _id: false }
+    {
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true }
+
+    }
 )
+
+perkTypeSchema.virtual('id').get(function () {
+    return this._id.toString()
+})
 
 export default perkTypeSchema

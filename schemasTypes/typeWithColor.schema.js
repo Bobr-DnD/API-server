@@ -15,7 +15,6 @@ const colorType = new mongoose.Schema(
         toJSON: { virtuals: true },
         toObject: { virtuals: true }
     }
-
 )
 
 colorType.virtual('id').get(function () {

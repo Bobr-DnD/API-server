@@ -6,11 +6,11 @@ import multipart from '@fastify/multipart'
 import errorHandler from './plugins/errorHandler.js'
 import charactersRoute from './routes/characterRouter.js'
 import sessionRouter from './routes/sessionRouter.js'
-import enemyRouter from './routes/enemyRouter.js'
 import commonRouter from './routes/commonRouter.js'
 import filesRouter from './routes/filesRouter.js'
 import mongoosePlugin from './plugins/mongoose.js'
 import customLogger from './plugins/logger.js'
+import importExportPlugin from './plugins/importExport/index.js'
 
 dotenv.config({ path: './.env' })
 
@@ -46,14 +46,16 @@ await fastify.register(multipart, {
 // Register routes
 fastify.register(charactersRoute, { prefix: '/character' })
 fastify.register(sessionRouter, { prefix: '/session' })
-fastify.register(enemyRouter, { prefix: '/enemy' })
 
 fastify.register(commonRouter, { prefix: '/entity', model: 'Entity', collection: 'entities' })
 fastify.register(commonRouter, { prefix: '/effect', model: 'Effect', collection: 'effects' })
 fastify.register(commonRouter, { prefix: '/perk', model: 'Perk', collection: 'perks' })
-fastify.register(commonRouter, { prefix: '/quest', model: 'Quest', collection: 'quests' })
 fastify.register(filesRouter, { prefix: '/storage' })
+fastify.register(importExportPlugin, { prefix: '/io' })
 
+fastify.get('/health', async (request, response) => {
+        return response.code(200).send({ message: 'API server is running' });
+    });
 
 // Start server
 const start = async () => {

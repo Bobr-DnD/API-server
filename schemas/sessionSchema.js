@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import iconType from "../schemasTypes/typeWithIcon.schema.js";
 import colorType from "../schemasTypes/typeWithColor.schema.js"
 import nameType from "../schemasTypes/TypeWithName.schema.js"
+import customField from "../schemasTypes/customField.schema.js";
+import loadoutLimitsSchema from '../schemasTypes/loadoutLimits.schema.js';
 
 const sessionSchema = new mongoose.Schema({
     name: {
@@ -22,8 +24,8 @@ const sessionSchema = new mongoose.Schema({
         required: [true, 'Session should have a password']
     },
     customFields: {
-        type: Object,
-        default: {}
+        type: [customField],
+        default: []
     },
     notes: {
         type: String,
@@ -41,16 +43,8 @@ const sessionSchema = new mongoose.Schema({
         type: [nameType],
         default: []
     },
-    questTypes: {
-        type: [nameType],
-        default: []
-    },
     perkTypes: {
         type: [colorType],
-        default: [],
-    },
-    enemyTypes: {
-        type: [iconType],
         default: [],
     },
     characters: {
@@ -63,11 +57,6 @@ const sessionSchema = new mongoose.Schema({
         ref: 'Entity',
         default: []
     },
-    enemies: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Enemy',
-        default: []
-    },
     perks: {
         type: [mongoose.Schema.ObjectId],
         ref: 'Perk',
@@ -78,10 +67,9 @@ const sessionSchema = new mongoose.Schema({
         ref: 'Effect',
         default: []
     },
-    quests: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'Quest',
-        default: []
+    loadoutsLimit: {
+        type: loadoutLimitsSchema,
+        default: () => ({})
     }
 }, {
     toJSON: { virtuals: true },

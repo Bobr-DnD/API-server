@@ -14,10 +14,13 @@ export function generateId() {
 
 export function toSessionCharacteristics(characterField, sessionField) {
 
-    const newStats = sessionField.reduce((stats, el) => {
-        stats[el.name] = characterField?.[el.name] ?? '0';
-        return stats;
-    }, {});
+    const newStats = sessionField.map((el, index) =>
+    ({
+        name: characterField[index]?.name ?? el.name,
+        value: characterField[index]?.value ?? 0,
+        id: characterField[index]?.id ?? createId()
+    })
+    )
 
     return newStats;
 }
@@ -35,7 +38,7 @@ export function toSessionCurrency(characterField, sessionField) {
 export async function updateCharacterSessionCharacteristic(characters, sessionStats) {
 
     for (const character of characters) {
-
+        
         character.characteristics = toSessionCharacteristics(
             character.characteristics,
             sessionStats
@@ -66,23 +69,4 @@ export async function updateCharacterSessionCurrency(characters, sessionStats) {
         );
     }
 
-}
-
-export function applyEffects(character) {
-    character._characteristicsComputed = Object.fromEntries(
-        Object.entries(character.characteristics).map(([key, value]) => {
-            if (!Number.isNaN(Number(value))) {
-                return [key, Number(value)]
-            }
-            return [key, value]
-        })
-    )
-
-    character.effects.forEach(effect => {
-        Object.entries(effect.effect).map(([key, value]) => {
-            if(!Number.isNaN(Number(character._characteristicsComputed[key]))) character._characteristicsComputed[key] += value
-        
-        //TODO handle string characteristics fields
-        })
-    });
 }

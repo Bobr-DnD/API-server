@@ -1,7 +1,6 @@
 import Entity from '../schemas/entitySchema.js'
 import Effect from '../schemas/effectSchema.js'
 import Perk from '../schemas/perkSchema.js'
-import Quest from '../schemas/questSchema.js'
 import { getEntities, getEntityById, createEntity, updateEntity, deleteEntity } from '../controllers/commonController.js'
 
 export default async function commonRouter(fastify, opts) {
@@ -10,7 +9,6 @@ export default async function commonRouter(fastify, opts) {
         Entity,
         Effect,
         Perk,
-        Quest,
     }
     const model = models[opts.model]
     
@@ -18,5 +16,5 @@ export default async function commonRouter(fastify, opts) {
     fastify.get('/:id', getEntityById(collection));
     fastify.post('/', createEntity(model, opts.collection))
     fastify.patch('/:id', updateEntity(model))
-    fastify.delete('/:id', deleteEntity(collection))
+    fastify.delete('/:id', deleteEntity(collection, opts.collection))
 }

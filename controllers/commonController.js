@@ -2,6 +2,7 @@ import { transformArray, transformId } from '../utils/IDConverter.js'
 import { toObjectId } from '../utils/IDConverter.js'
 import { addItem } from './sessionController.js'
 import { addId } from '../utils/characterHelper.js'
+import { clearDeletedReferences, clearDeletedEffectFromEntities } from '../utils/itemCleanup.js'
 
 export const getEntities = (collection) => async (request, response) => {
     const object = await collection().find().toArray()
@@ -38,11 +39,17 @@ export const updateEntity = (model) => async (request, response) => {
     return response.code(200).send(object)
 }
 
-export const deleteEntity = (collection) => async (request, response) => {
+export const deleteEntity = (collection, collectionName) => async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
 
     const result = await collection().deleteOne({ _id: objectId })
     if (result.deletedCount === 0) return response.code(404).send({ error: `${entity} not found` })
+
+    if (collectionName === 'entities' || collectionName === 'perks' || collectionName === 'effects') {
+        await clearDeletedReferences(request.params.id, collectionName)
+    }
+
+    if (collectionName === 'effects') await clearDeletedEffectFromEntities(request.params.id)
 
     return response.code(201).send({ success: true })
 }

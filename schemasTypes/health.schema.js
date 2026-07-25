@@ -4,7 +4,7 @@ const healthSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            tirm: true
+            trim: true
         },
         min: {
             type: Number,

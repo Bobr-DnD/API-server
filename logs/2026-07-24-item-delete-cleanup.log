@@ -1,0 +1,55 @@
+2026-07-24 - Item delete cleanup
+
+Task: after an item (Entity) is deleted, clear its references from
+Session/Character fields, since deleteEntity previously left dangling ids.
+
+Files changed:
+- utils/itemCleanup.js (new)
+- controllers/commonController.js
+- routes/commonRouter.js
+
+--- utils/itemCleanup.js (new file) ---
+import Session from '../schemas/sessionSchema.js'
+import Character from '../schemas/characterSchema.js'
+
+export async function clearDeletedItemReferences(itemId) {
+    await Session.updateMany(
+        { entities: itemId },
+        { $pull: { entities: itemId } }
+    )
+
+    await Character.updateMany(
+        { $or: [{ entities: itemId }, { 'loadouts.itemsIds': itemId }] },
+        { $pull: { entities: itemId, 'loadouts.$[].itemsIds': itemId } }
+    )
+}
+
+Notes:
+- Entity documents don't store their own session id, so the deleted item's
+  id can't be scoped to a single session/character up front. This sweeps
+  Session.entities, Character.entities, and every Character.loadouts[].itemsIds
+  by id across the collection instead.
+- Only wired up for item ("entities") deletes, not Effect/Perk deletes.
+
+--- controllers/commonController.js ---
++ import { clearDeletedItemReferences } from '../utils/itemCleanup.js'
+
+- export const deleteEntity = (collection) => async (request, response) => {
++ export const deleteEntity = (collection, collectionName) => async (request, response) => {
+      const objectId = toObjectId(request.params.id, response)
+
+      const result = await collection().deleteOne({ _id: objectId })
+      if (result.deletedCount === 0) return response.code(404).send({ error: `${entity} not found` })
+
++     if (collectionName === 'entities') await clearDeletedItemReferences(request.params.id)
+
+      return response.code(201).send({ success: true })
+  }
+
+--- routes/commonRouter.js ---
+-   fastify.delete('/:id', deleteEntity(collection))
++   fastify.delete('/:id', deleteEntity(collection, opts.collection))
+
+Open follow-up (not implemented): Effect/Perk deletes still don't clean up
+character.effects / character.perks / loadouts[].perksIds. Same pattern
+would extend to those if wanted.

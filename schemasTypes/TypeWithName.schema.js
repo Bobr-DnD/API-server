@@ -11,7 +11,6 @@ const nameType = new mongoose.Schema(
         toJSON: { virtuals: true },
         toObject: { virtuals: true }
     }
-
 )
 
 nameType.virtual('id').get(function () {
