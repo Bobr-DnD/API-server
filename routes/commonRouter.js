@@ -16,5 +16,5 @@ export default async function commonRouter(fastify, opts) {
     fastify.get('/:id', getEntityById(collection));
     fastify.post('/', createEntity(model, opts.collection))
     fastify.patch('/:id', updateEntity(model))
-    fastify.delete('/:id', deleteEntity(collection))
+    fastify.delete('/:id', deleteEntity(collection, opts.collection))
 }
