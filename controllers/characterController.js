@@ -5,6 +5,7 @@ import { toObjectId } from '../utils/IDConverter.js'
 import { addId, toSessionCharacteristics, toSessionCurrency } from '../utils/characterHelper.js'
 import { populateCharacter } from '../utils/entityPopulator.js'
 import { sortByTwoFields, sortPerksByTwoFields } from '../utils/filtration.js'
+import { applyPatchOps } from '../utils/patchHelper.js'
 
 export const getCharacters = async (request, response) => {
     const characters = await Character.find();
@@ -49,7 +50,11 @@ export const createCharacter = async (request, response) => {
 export const updateCharacter = async (request, response) => {
 
     const objectId = toObjectId(request.params.id, response)
-    const character_data = request.body
+
+    const { data: character_data, error } = applyPatchOps(request.body?.ops)
+    if (error) {
+        return response.code(400).send({ error })
+    }
 
     const character = await populateCharacter(
         Character.findByIdAndUpdate(objectId, character_data, { new: true, runValidators: true })

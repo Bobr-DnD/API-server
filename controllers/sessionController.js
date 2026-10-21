@@ -2,7 +2,8 @@ import Session from '../schemas/sessionSchema.js'
 import { toObjectId, preserveSubdocIds } from '../utils/IDConverter.js'
 import { populateSession, populateSessionCharacters, populateSessionEntitiesAndPerks } from '../utils/entityPopulator.js';
 import { sortByTwoFields, sortPerksByTwoFields } from '../utils/filtration.js';
-import { addId, updateCharacterSessionCharacteristic, updateCharacterSessionCurrency } from '../utils/characterHelper.js';
+import { updateCharacterSessionCharacteristic, updateCharacterSessionCurrency } from '../utils/characterHelper.js';
+import { applyPatchOps } from '../utils/patchHelper.js';
 
 export const getSessions = async (request, response) => {
     const sessions = await Session.find();
@@ -76,7 +77,11 @@ const SUBDOC_ARRAY_FIELDS = ['entityTypes', 'currencyTypes', 'characteristicsLis
 export const updateSession = async (request, response) => {
 
     const objectId = toObjectId(request.params.id, response)
-    const session_data = request.body
+
+    const { data: session_data, error } = applyPatchOps(request.body?.ops)
+    if (error) {
+        return response.code(400).send({ error })
+    }
 
     const existingSession = await Session.findById(objectId)
     if (!existingSession) {

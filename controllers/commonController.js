@@ -3,6 +3,7 @@ import { toObjectId } from '../utils/IDConverter.js'
 import { addItem } from './sessionController.js'
 import { addId } from '../utils/characterHelper.js'
 import { clearDeletedReferences, clearDeletedEffectFromEntities } from '../utils/itemCleanup.js'
+import { applyPatchOps } from '../utils/patchHelper.js'
 
 export const getEntities = (collection) => async (request, response) => {
     const object = await collection().find().toArray()
@@ -31,9 +32,14 @@ export const createEntity = (model, field) => async (request, response) => {
 export const updateEntity = (model) => async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
 
-    if (request.body.steps) request.body.steps.forEach(step => addId(step))
+    const { data: entity_data, error } = applyPatchOps(request.body?.ops)
+    if (error) {
+        return response.code(400).send({ error })
+    }
 
-    const object = await model.findByIdAndUpdate(objectId, request.body, { new: true, runValidators: true })
+    if (entity_data.steps) entity_data.steps.forEach(step => addId(step))
+
+    const object = await model.findByIdAndUpdate(objectId, entity_data, { new: true, runValidators: true })
     if (!object) return response.code(404).send({ error: `${model} not found` })
 
     return response.code(200).send(object)
