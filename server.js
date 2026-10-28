@@ -4,6 +4,7 @@ import cors from '@fastify/cors'
 import db from './plugins/mongoDB.js'
 import multipart from '@fastify/multipart'
 import errorHandler from './plugins/errorHandler.js'
+import authPlugin from './plugins/auth.js'
 import charactersRoute from './routes/characterRouter.js'
 import sessionRouter from './routes/sessionRouter.js'
 import commonRouter from './routes/commonRouter.js'
@@ -39,6 +40,7 @@ await fastify.register(cors, { origin: corsOrigins, credentials: true })
 await fastify.register(db, { use_local: process.env.DB_LOCAL === 'true' })
 await fastify.register(mongoosePlugin, { use_local: process.env.DB_LOCAL === 'true' })
 await fastify.register(errorHandler)
+await fastify.register(authPlugin)
 
 await fastify.register(multipart, {
   limits: { fileSize: 10 * 1024 * 1024 }

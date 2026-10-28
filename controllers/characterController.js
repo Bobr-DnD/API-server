@@ -8,7 +8,7 @@ import { sortByTwoFields, sortPerksByTwoFields } from '../utils/filtration.js'
 import { applyPatchOps } from '../utils/patchHelper.js'
 
 export const getCharacters = async (request, response) => {
-    const characters = await Character.find();
+    const characters = await Character.find({ session: request.auth.sessionId });
     return response.code(200).send(characters)
 }
 
@@ -23,14 +23,23 @@ export const getCharacterById = async (request, response) => {
         return response.code(404).send({ error: `Character with ID ${objectId} not found` })
     }
 
+    if (character.session.toString() !== request.auth.sessionId) {
+        return response.code(403).send({ error: 'Character does not belong to this session' })
+    }
+
     sortFields(character)
-    
+
     return response.code(200).send(character)
 }
 
 export const createCharacter = async (request, response) => {
 
     const character_data = request.body
+
+    if (character_data.session !== request.auth.sessionId) {
+        return response.code(403).send({ error: 'Cannot create a character in another session' })
+    }
+
     const session = await Session.findById(character_data.session)
 
     if (character_data.health) character_data.health.forEach(h => addId(h))
@@ -50,6 +59,14 @@ export const createCharacter = async (request, response) => {
 export const updateCharacter = async (request, response) => {
 
     const objectId = toObjectId(request.params.id, response)
+
+    const existingCharacter = await Character.findById(objectId).select('session')
+    if (!existingCharacter) {
+        return response.code(404).send({ error: `Character with ID ${objectId} not found` })
+    }
+    if (existingCharacter.session.toString() !== request.auth.sessionId) {
+        return response.code(403).send({ error: 'Character does not belong to this session' })
+    }
 
     const { data: character_data, error } = applyPatchOps(request.body?.ops)
     if (error) {
@@ -72,10 +89,15 @@ export const updateCharacter = async (request, response) => {
 export const deleteCharacter = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
 
-    const character = await Character.findByIdAndDelete(objectId)
-    if (!character) {
+    const existingCharacter = await Character.findById(objectId).select('session')
+    if (!existingCharacter) {
         return response.code(404).send({ error: `Character with ID ${objectId} not found` })
     }
+    if (existingCharacter.session.toString() !== request.auth.sessionId) {
+        return response.code(403).send({ error: 'Character does not belong to this session' })
+    }
+
+    const character = await Character.findByIdAndDelete(objectId)
 
     await removeItem({ sessionId: character.session, id: character.id, field: 'characters' })
     return response.code(200).send({ status: 'Success', id: character.id })

@@ -12,9 +12,9 @@ export default async function commonRouter(fastify, opts) {
     }
     const model = models[opts.model]
     
-    fastify.get('/', getEntities(collection));
-    fastify.get('/:id', getEntityById(collection));
-    fastify.post('/', createEntity(model, opts.collection))
-    fastify.patch('/:id', updateEntity(model))
-    fastify.delete('/:id', deleteEntity(collection, opts.collection))
+    fastify.get('/', { preHandler: fastify.authenticate }, getEntities(collection));
+    fastify.get('/:id', { preHandler: fastify.authenticate }, getEntityById(collection));
+    fastify.post('/', { preHandler: fastify.requireAdmin }, createEntity(model, opts.collection))
+    fastify.patch('/:id', { preHandler: fastify.requireAdmin }, updateEntity(model))
+    fastify.delete('/:id', { preHandler: fastify.requireAdmin }, deleteEntity(collection, opts.collection))
 }

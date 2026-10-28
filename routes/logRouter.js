@@ -1,5 +1,5 @@
 import { getLogs } from '../controllers/logController.js'
 
 export default async function logRouter(fastify, opts) {
-    fastify.get('/', getLogs);
+    fastify.get('/', { preHandler: fastify.requireAdmin }, getLogs);
 }

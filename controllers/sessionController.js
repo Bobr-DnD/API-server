@@ -123,43 +123,60 @@ export const deleteSession = async (request, response) => {
     return response.code(200).send({ status: 'Success' })
 }
 
+const ROLE_TO_FIELD = {
+    admin: 'adminPassword',
+    user: 'password'
+}
+
 export const login = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
-    const { password } = request.body
-    const session = await Session.findById(objectId).select('+password')
+    const { password, role } = request.body
+    const field = ROLE_TO_FIELD[role]
+
+    if (!field) {
+        return response.code(400).send({ error: `Invalid role: ${role}` })
+    }
+
+    const session = await Session.findById(objectId).select(`+${field}`)
 
     if (!session) {
         return response.code(404).send({ error: `Session with ID ${objectId} not found` })
     }
 
-    const match = await session.comparePassword(password)
+    const match = await session.comparePassword(password, field)
 
     if (!match) {
         return response.code(402).send({ success: false, error: 'Invalid credentials' })
     }
 
-    return response.code(200).send({ success: true, message: 'Login successful' })
+    const token = request.server.signSessionToken({ sessionId: objectId.toString(), role })
+
+    return response.code(200).send({ success: true, message: 'Login successful', token, role })
 }
 
 export const changePassword = async (request, response) => {
     const objectId = toObjectId(request.params.id, response)
-    const { password, passwordNew } = request.body
-    
-    const session = await Session.findById(objectId).select('+password')
+    const { password, passwordNew, field = 'password' } = request.body
+
+    if (field !== 'password' && field !== 'adminPassword') {
+        return response.code(400).send({ error: `Invalid field: ${field}` })
+    }
+
+    const session = await Session.findById(objectId).select(`+${field}`)
 
     if (!session) {
         return response.code(404).send({ error: `Session with ID ${objectId} not found` })
     }
 
-    const match = await session.comparePassword(password)
+    const match = await session.comparePassword(password, field)
 
     if (!match) {
         return response.code(400).send({ success: false, error: 'Password wrong' })
     }
 
-    session.password = passwordNew
+    session[field] = passwordNew
 
-    await Session.findByIdAndUpdate(objectId, session,{ new: true, runValidators: true })
+    await Session.findByIdAndUpdate(objectId, session, { new: true, runValidators: true })
 
     return response.code(200).send({ success: true, message: 'Password changed' })
 }

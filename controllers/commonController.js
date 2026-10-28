@@ -20,7 +20,11 @@ export const getEntityById = (collection) => async (request, response) => {
 }
 
 export const createEntity = (model, field) => async (request, response) => {
-    
+
+    if (request.body.session !== request.auth.sessionId) {
+        return response.code(403).send({ error: 'Cannot create a resource in another session' })
+    }
+
     if (request.body.steps) request.body.steps.forEach(step => addId(step))
 
     const object = await model.create(request.body)

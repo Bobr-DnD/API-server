@@ -4,10 +4,9 @@ import Session from '../schemas/sessionSchema.js'
 import { transformId } from '../utils/IDConverter.js'
 
 export const getLogs = async (request, response) => {
-    const { page = 1, limit = 50, sessionId, characterName, event } = request.query
+    const { page = 1, limit = 50, characterName, event } = request.query
 
-    const filter = {}
-    if (sessionId) filter.sessionId = sessionId
+    const filter = { sessionId: request.auth.sessionId }
     if (event) filter.event = event
 
     if (characterName) {
