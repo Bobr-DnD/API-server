@@ -69,7 +69,9 @@ export const createSession = async (request, response) => {
     if (!session) {
         return response.code(404).send({ error: 'Can`t create session' })
     }
-    return response.code(201).send(session)
+
+    const { password, adminPassword, ...safeSession } = session.toObject()
+    return response.code(201).send(safeSession)
 }
 
 const SUBDOC_ARRAY_FIELDS = ['entityTypes', 'currencyTypes', 'characteristicsList', 'perkTypes', 'customFields']
