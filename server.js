@@ -10,6 +10,7 @@ import sessionRouter from './routes/sessionRouter.js'
 import commonRouter from './routes/commonRouter.js'
 import filesRouter from './routes/filesRouter.js'
 import logRouter from './routes/logRouter.js'
+import fightRouter from './routes/fightRouter.js'
 import mongoosePlugin from './plugins/mongoose.js'
 import customLogger from './plugins/logger.js'
 import importExportPlugin from './plugins/importExport/index.js'
@@ -56,6 +57,7 @@ fastify.register(commonRouter, { prefix: '/perk', model: 'Perk', collection: 'pe
 fastify.register(filesRouter, { prefix: '/storage' })
 fastify.register(importExportPlugin, { prefix: '/io' })
 fastify.register(logRouter, { prefix: '/logs' })
+fastify.register(fightRouter, { prefix: '/fight' })
 
 fastify.get('/health', async (request, response) => {
         return response.code(200).send({ message: 'API server is running' });

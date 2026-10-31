@@ -6,6 +6,7 @@ import { addId, toSessionCharacteristics, toSessionCurrency } from '../utils/cha
 import { populateCharacter } from '../utils/entityPopulator.js'
 import { sortByTwoFields, sortPerksByTwoFields } from '../utils/filtration.js'
 import { applyPatchOps } from '../utils/patchHelper.js'
+import { clearDeletedCharacterFromFights } from '../utils/itemCleanup.js'
 
 export const getCharacters = async (request, response) => {
     const characters = await Character.find({ session: request.auth.sessionId });
@@ -100,6 +101,7 @@ export const deleteCharacter = async (request, response) => {
     const character = await Character.findByIdAndDelete(objectId)
 
     await removeItem({ sessionId: character.session, id: character.id, field: 'characters' })
+    await clearDeletedCharacterFromFights(character.id)
     return response.code(200).send({ status: 'Success', id: character.id })
 }
 
