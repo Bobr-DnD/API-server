@@ -4,10 +4,12 @@ import cors from '@fastify/cors'
 import db from './plugins/mongoDB.js'
 import multipart from '@fastify/multipart'
 import errorHandler from './plugins/errorHandler.js'
+import authPlugin from './plugins/auth.js'
 import charactersRoute from './routes/characterRouter.js'
 import sessionRouter from './routes/sessionRouter.js'
 import commonRouter from './routes/commonRouter.js'
 import filesRouter from './routes/filesRouter.js'
+import logRouter from './routes/logRouter.js'
 import mongoosePlugin from './plugins/mongoose.js'
 import customLogger from './plugins/logger.js'
 import importExportPlugin from './plugins/importExport/index.js'
@@ -38,6 +40,7 @@ await fastify.register(cors, { origin: corsOrigins, credentials: true })
 await fastify.register(db, { use_local: process.env.DB_LOCAL === 'true' })
 await fastify.register(mongoosePlugin, { use_local: process.env.DB_LOCAL === 'true' })
 await fastify.register(errorHandler)
+await fastify.register(authPlugin)
 
 await fastify.register(multipart, {
   limits: { fileSize: 10 * 1024 * 1024 }
@@ -52,6 +55,7 @@ fastify.register(commonRouter, { prefix: '/effect', model: 'Effect', collection:
 fastify.register(commonRouter, { prefix: '/perk', model: 'Perk', collection: 'perks' })
 fastify.register(filesRouter, { prefix: '/storage' })
 fastify.register(importExportPlugin, { prefix: '/io' })
+fastify.register(logRouter, { prefix: '/logs' })
 
 fastify.get('/health', async (request, response) => {
         return response.code(200).send({ message: 'API server is running' });

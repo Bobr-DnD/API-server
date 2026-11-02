@@ -39,7 +39,7 @@ export default async function importExportPlugin(fastify) {
             .send(buffer)
     })
 
-    fastify.get('/:sessionId/:type/export', async (request, reply) => {
+    fastify.get('/:sessionId/:type/export', { preHandler: [fastify.requireAdmin, fastify.requireSessionParam('sessionId')] }, async (request, reply) => {
         const { sessionId, type } = request.params
         const model = TYPE_MODELS[type]
         const fields = TYPE_FIELDS[type]
@@ -67,7 +67,7 @@ export default async function importExportPlugin(fastify) {
             .send(buffer)
     })
 
-    fastify.post('/:sessionId/:type/import', async (request, reply) => {
+    fastify.post('/:sessionId/:type/import', { preHandler: [fastify.requireAdmin, fastify.requireSessionParam('sessionId')] }, async (request, reply) => {
         const { sessionId, type } = request.params
         const model = TYPE_MODELS[type]
         const fields = TYPE_FIELDS[type]

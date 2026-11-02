@@ -23,6 +23,12 @@ const sessionSchema = new mongoose.Schema({
         select: false,
         required: [true, 'Session should have a password']
     },
+    adminPassword: {
+        type: String,
+        minLength: 8,
+        select: false,
+        required: [true, 'Session should have an admin password']
+    },
     customFields: {
         type: [customField],
         default: []
@@ -76,14 +82,16 @@ const sessionSchema = new mongoose.Schema({
     toObject: { virtuals: true }
 })
 
-sessionSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) {
-        return next();
-    }
+const PASSWORD_FIELDS = ['password', 'adminPassword']
 
+sessionSchema.pre('save', async function (next) {
     try {
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
+        for (const field of PASSWORD_FIELDS) {
+            if (this.isModified(field)) {
+                const salt = await bcrypt.genSalt(10);
+                this[field] = await bcrypt.hash(this[field], salt);
+            }
+        }
         next();
     } catch (error) {
         next(error);
@@ -93,29 +101,24 @@ sessionSchema.pre('save', async function (next) {
 sessionSchema.pre('findOneAndUpdate', async function () {
     const update = this.getUpdate();
 
-    const password = update?.password || update.$set?.password
-    
-    if (!password) {
-        return;
-    }
+    for (const field of PASSWORD_FIELDS) {
+        const value = update?.[field] || update.$set?.[field]
+        if (!value) continue
 
-    try {
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const hashed = await bcrypt.hash(value, salt);
 
         if (update.$set) {
-            update.$set.password = hashedPassword;
+            update.$set[field] = hashed;
         } else {
-            this.set({ password: hashedPassword });
+            this.set({ [field]: hashed });
         }
-    } catch (error) {
-        throw error;
     }
-
 })
 
-sessionSchema.methods.comparePassword = async function (candidatePasword) {
-    return await bcrypt.compare(candidatePasword, this.password)
+sessionSchema.methods.comparePassword = async function (candidatePasword, field = 'password') {
+    if (!this[field]) return false
+    return await bcrypt.compare(candidatePasword, this[field])
 }
 
 export default mongoose.model('Session', sessionSchema)
