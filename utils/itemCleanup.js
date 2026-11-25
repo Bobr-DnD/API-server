@@ -36,14 +36,6 @@ export async function clearDeletedReferences(id, field) {
             { $pull: { [`enemies.$[].${field}`]: id } }
         )
     }
-
-    if (field === 'entities') {
-        await Fight.updateMany(
-            { 'participants.activeWeapon': id },
-            { $set: { 'participants.$[p].activeWeapon': null } },
-            { arrayFilters: [{ 'p.activeWeapon': id }] }
-        )
-    }
 }
 
 export async function clearDeletedEffectFromEntities(effectId) {

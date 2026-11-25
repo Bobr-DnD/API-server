@@ -2,7 +2,7 @@ import Fight from '../schemas/fightSchema.js'
 import { toObjectId, preserveSubdocIds } from '../utils/IDConverter.js'
 import { applyPatchOps } from '../utils/patchHelper.js'
 
-const SUBDOC_ARRAY_FIELDS = ['tiles', 'enemies', 'participants']
+const SUBDOC_ARRAY_FIELDS = ['enemies', 'participants']
 
 export const getFights = async (request, response) => {
     const fights = await Fight.find({ session: request.auth.sessionId })
